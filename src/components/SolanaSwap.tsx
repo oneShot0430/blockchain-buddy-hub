@@ -13,6 +13,19 @@ import {
 import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 
+interface RaydiumToken {
+  symbol: string;
+  name: string;
+  mint: string;
+  tags?: string[];
+}
+
+interface RaydiumResponse {
+  tokens: {
+    [key: string]: RaydiumToken;
+  };
+}
+
 interface TokenInfo {
   symbol: string;
   name: string;
@@ -20,21 +33,29 @@ interface TokenInfo {
 }
 
 const fetchRaydiumTokens = async (): Promise<TokenInfo[]> => {
-  const response = await fetch('https://api.raydium.io/v2/sdk/token/raydium.mainnet.json');
-  const data = await response.json();
-  
-  // Filter for meme coins and tokens with sufficient liquidity
-  return Object.values(data.tokens)
-    .filter((token: any) => {
-      const isMemeCoin = token.tags?.includes('meme') || 
-                        ['BONK', 'MYRO', 'WIF', 'POPCAT', 'SAMO'].includes(token.symbol);
-      return isMemeCoin;
-    })
-    .map((token: any) => ({
-      symbol: token.symbol,
-      name: token.name,
-      mint: token.mint
-    }));
+  try {
+    const response = await fetch('https://api.raydium.io/v2/sdk/token/raydium.mainnet.json');
+    if (!response.ok) {
+      throw new Error('Failed to fetch tokens');
+    }
+    const data: RaydiumResponse = await response.json();
+    
+    // Filter for meme coins and tokens with sufficient liquidity
+    return Object.values(data.tokens)
+      .filter((token: RaydiumToken) => {
+        const isMemeCoin = token.tags?.includes('meme') || 
+                          ['BONK', 'MYRO', 'WIF', 'POPCAT', 'SAMO'].includes(token.symbol);
+        return isMemeCoin;
+      })
+      .map((token: RaydiumToken) => ({
+        symbol: token.symbol,
+        name: token.name,
+        mint: token.mint
+      }));
+  } catch (error) {
+    console.error('Error fetching Raydium tokens:', error);
+    throw error;
+  }
 };
 
 export const SolanaSwap = () => {
