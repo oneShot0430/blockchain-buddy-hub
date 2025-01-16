@@ -10,23 +10,50 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
 
-// Popular Solana meme coins with their symbols and names
-const MEME_COINS = [
-  { symbol: "BONK", name: "Bonk" },
-  { symbol: "MYRO", name: "Myro" },
-  { symbol: "WIF", name: "Wif" },
-  { symbol: "POPCAT", name: "Pop Cat" },
-  { symbol: "SAMO", name: "Samoyedcoin" },
-] as const;
+interface TokenInfo {
+  symbol: string;
+  name: string;
+  mint: string;
+}
+
+const fetchRaydiumTokens = async (): Promise<TokenInfo[]> => {
+  const response = await fetch('https://api.raydium.io/v2/sdk/token/raydium.mainnet.json');
+  const data = await response.json();
+  
+  // Filter for meme coins and tokens with sufficient liquidity
+  return Object.values(data.tokens)
+    .filter((token: any) => {
+      const isMemeCoin = token.tags?.includes('meme') || 
+                        ['BONK', 'MYRO', 'WIF', 'POPCAT', 'SAMO'].includes(token.symbol);
+      return isMemeCoin;
+    })
+    .map((token: any) => ({
+      symbol: token.symbol,
+      name: token.name,
+      mint: token.mint
+    }));
+};
 
 export const SolanaSwap = () => {
   const { connection } = useConnection();
   const { publicKey, sendTransaction } = useWallet();
   const { toast } = useToast();
   const [amount, setAmount] = useState("");
-  const [selectedCoin, setSelectedCoin] = useState<string>(MEME_COINS[0].symbol);
+  const [selectedCoin, setSelectedCoin] = useState<string>("");
+
+  const { data: memeCoins, isLoading, error } = useQuery({
+    queryKey: ['raydiumTokens'],
+    queryFn: fetchRaydiumTokens,
+  });
+
+  useEffect(() => {
+    if (memeCoins && memeCoins.length > 0 && !selectedCoin) {
+      setSelectedCoin(memeCoins[0].symbol);
+    }
+  }, [memeCoins]);
 
   const checkUSDCBalance = async () => {
     if (!publicKey) {
@@ -38,7 +65,6 @@ export const SolanaSwap = () => {
       return;
     }
 
-    // Here you would implement the actual USDC balance check
     toast({
       title: "Balance Check",
       description: "USDC Balance check would happen here",
@@ -78,6 +104,14 @@ export const SolanaSwap = () => {
     }
   };
 
+  if (isLoading) {
+    return <div className="text-center p-4">Loading meme coins...</div>;
+  }
+
+  if (error) {
+    return <div className="text-center text-red-500 p-4">Error loading meme coins</div>;
+  }
+
   return (
     <div className="flex flex-col items-center gap-6 p-6 rounded-lg border gradient-card text-card-foreground shadow-sm">
       <h2 className="text-2xl font-bold">Swap USDC to Meme Coins</h2>
@@ -92,8 +126,8 @@ export const SolanaSwap = () => {
               <SelectValue placeholder="Select a meme coin" />
             </SelectTrigger>
             <SelectContent>
-              {MEME_COINS.map((coin) => (
-                <SelectItem key={coin.symbol} value={coin.symbol}>
+              {memeCoins?.map((coin) => (
+                <SelectItem key={coin.mint} value={coin.symbol}>
                   {coin.name} ({coin.symbol})
                 </SelectItem>
               ))}
