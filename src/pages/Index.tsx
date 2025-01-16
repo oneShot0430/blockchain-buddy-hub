@@ -9,8 +9,8 @@ import { WalletModalProvider } from "@solana/wallet-adapter-react-ui";
 import { clusterApiUrl } from "@solana/web3.js";
 import { PhantomWalletAdapter } from "@solana/wallet-adapter-wallets";
 import { useMemo } from "react";
-
-require("@solana/wallet-adapter-react-ui/styles.css");
+// Import Solana wallet adapter styles
+import "@solana/wallet-adapter-react-ui/styles.css";
 
 const Index = () => {
   const endpoint = useMemo(() => clusterApiUrl("devnet"), []);
