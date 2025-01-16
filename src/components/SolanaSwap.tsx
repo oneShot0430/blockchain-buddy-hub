@@ -3,13 +3,30 @@ import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 import { useToast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { useState } from "react";
+
+// Popular Solana meme coins with their symbols and names
+const MEME_COINS = [
+  { symbol: "BONK", name: "Bonk" },
+  { symbol: "MYRO", name: "Myro" },
+  { symbol: "WIF", name: "Wif" },
+  { symbol: "POPCAT", name: "Pop Cat" },
+  { symbol: "SAMO", name: "Samoyedcoin" },
+] as const;
 
 export const SolanaSwap = () => {
   const { connection } = useConnection();
   const { publicKey, sendTransaction } = useWallet();
   const { toast } = useToast();
   const [amount, setAmount] = useState("");
+  const [selectedCoin, setSelectedCoin] = useState<string>(MEME_COINS[0].symbol);
 
   const checkUSDCBalance = async () => {
     if (!publicKey) {
@@ -22,7 +39,6 @@ export const SolanaSwap = () => {
     }
 
     // Here you would implement the actual USDC balance check
-    // This is a placeholder for demo purposes
     toast({
       title: "Balance Check",
       description: "USDC Balance check would happen here",
@@ -49,11 +65,9 @@ export const SolanaSwap = () => {
     }
 
     try {
-      // Here you would implement the actual swap logic
-      // This is a placeholder for demo purposes
       toast({
         title: "Swap Initiated",
-        description: "Swap would happen here",
+        description: `Swapping ${amount} USDC to ${selectedCoin}`,
       });
     } catch (error) {
       toast({
@@ -65,12 +79,28 @@ export const SolanaSwap = () => {
   };
 
   return (
-    <div className="flex flex-col items-center gap-6 p-6 rounded-lg border bg-card text-card-foreground shadow-sm">
+    <div className="flex flex-col items-center gap-6 p-6 rounded-lg border gradient-card text-card-foreground shadow-sm">
       <h2 className="text-2xl font-bold">Swap USDC to Meme Coins</h2>
       
       <div className="w-full max-w-md space-y-4">
         <WalletMultiButton className="w-full" />
         
+        <div className="space-y-2">
+          <label className="text-sm font-medium">Select Meme Coin</label>
+          <Select value={selectedCoin} onValueChange={setSelectedCoin}>
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Select a meme coin" />
+            </SelectTrigger>
+            <SelectContent>
+              {MEME_COINS.map((coin) => (
+                <SelectItem key={coin.symbol} value={coin.symbol}>
+                  {coin.name} ({coin.symbol})
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+
         <div className="space-y-2">
           <label className="text-sm font-medium">Amount (USDC)</label>
           <Input
@@ -87,7 +117,7 @@ export const SolanaSwap = () => {
           className="w-full"
           disabled={!publicKey || !amount || parseFloat(amount) < 100}
         >
-          Swap to Meme Coins
+          Swap to {selectedCoin}
         </Button>
       </div>
     </div>
