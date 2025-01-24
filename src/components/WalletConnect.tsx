@@ -55,9 +55,9 @@ export const WalletConnect = () => {
           <p className="text-sm text-muted-foreground">
             Address: {address.slice(0, 6)}...{address.slice(-4)}
           </p>
-          <p className="text-sm text-muted-foreground">
+          {/* <p className="text-sm text-muted-foreground">
             Balance: {parseFloat(balance).toFixed(4)} ETH
-          </p>
+          </p> */}
         </div>
       )}
     </div>

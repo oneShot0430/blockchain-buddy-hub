@@ -5,7 +5,7 @@ import { BrowserProvider, parseEther } from "ethers";
 import { Send } from "lucide-react";
 import { useState } from "react";
 
-export const TransferForm = () => {
+export const transfer = () => {
   const [recipient, setRecipient] = useState("");
   const [amount, setAmount] = useState("");
   const [loading, setLoading] = useState(false);
@@ -43,30 +43,30 @@ export const TransferForm = () => {
     }
   };
 
-  return (
-    <form onSubmit={handleTransfer} className="space-y-4 w-full max-w-md">
-      <Input
-        placeholder="Recipient Address"
-        value={recipient}
-        onChange={(e) => setRecipient(e.target.value)}
-        className="bg-secondary"
-      />
-      <Input
-        placeholder="Amount (ETH)"
-        type="number"
-        step="0.0001"
-        value={amount}
-        onChange={(e) => setAmount(e.target.value)}
-        className="bg-secondary"
-      />
-      <Button
-        type="submit"
-        disabled={loading || !recipient || !amount}
-        className="w-full flex items-center gap-2"
-      >
-        <Send className="h-4 w-4" />
-        {loading ? "Sending..." : "Send ETH"}
-      </Button>
-    </form>
-  );
+  // return (
+  //   <form onSubmit={handleTransfer} className="space-y-4 w-full max-w-md">
+  //     <Input
+  //       placeholder="Recipient Address"
+  //       value={recipient}
+  //       onChange={(e) => setRecipient(e.target.value)}
+  //       className="bg-secondary"
+  //     />
+  //     <Input
+  //       placeholder="Amount (ETH)"
+  //       type="number"
+  //       step="0.0001"
+  //       value={amount}
+  //       onChange={(e) => setAmount(e.target.value)}
+  //       className="bg-secondary"
+  //     />
+  //     <Button
+  //       type="submit"
+  //       disabled={loading || !recipient || !amount}
+  //       className="w-full flex items-center gap-2"
+  //     >
+  //       <Send className="h-4 w-4" />
+  //       {loading ? "Sending..." : "Send ETH"}
+  //     </Button>
+  //   </form>
+  // );
 };

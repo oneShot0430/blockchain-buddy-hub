@@ -1,5 +1,4 @@
 import { WalletConnect } from "@/components/WalletConnect";
-import { TransferForm } from "@/components/TransferForm";
 import { SolanaSwap } from "@/components/SolanaSwap";
 import {
   WalletProvider,
@@ -22,7 +21,7 @@ const Index = () => {
         <WalletModalProvider>
           <div className="min-h-screen flex flex-col items-center justify-center p-4 gap-8">
             <div className="text-center">
-              <h1 className="text-4xl font-bold mb-2">Web3 Wallet</h1>
+              <h1 className="text-4xl font-bold mb-2">ZEX BRIDGE</h1>
               <p className="text-muted-foreground">
                 Connect your wallet and start transferring ETH or swap USDC for meme coins
               </p>
@@ -30,9 +29,9 @@ const Index = () => {
             
             <WalletConnect />
             
-            <div className="w-full max-w-md">
+            {/* <div className="w-full max-w-md">
               <TransferForm />
-            </div>
+            </div> */}
 
             <div className="w-full max-w-md">
               <SolanaSwap />
