@@ -166,9 +166,21 @@ export const swap_rango = async (
       fromAmount
     );
     console.log("routes:", routes);
-    const confirmedRoute = await confirmRoute(routes.requestId, fromChain, toChain, signer.address, toAddress);
+
+    
+    const confirmResponse = await confirmRoute(routes.requestId, fromChain, toChain, signer.address, toAddress);
+    const confirmedRoute = confirmResponse.result;
     console.log("confirmed Route:", confirmedRoute);
-    const transactionResponse = await createRangoTransaction(confirmedRoute.result.requestId, 1, 1);
+
+    if (!confirmedRoute) {
+      throw new Error(`Error in confirming route, ${confirmResponse.error}`)
+    }
+    
+    let step = 1;
+
+    const swapSteps = confirmedRoute.result?.swaps || [];
+    
+    const transactionResponse = await createRangoTransaction(confirmedRoute.requestId, 1, 1);
     console.log("transaction:", transactionResponse);
     const tx = transactionResponse.transaction;
 
