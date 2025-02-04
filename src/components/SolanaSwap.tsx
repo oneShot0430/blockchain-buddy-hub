@@ -14,7 +14,7 @@ import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { transfer } from "@/hooks/li-fi";
 import { swap_rango } from "@/hooks/rango";
-import { USDC, BRETT } from "@/const/const";
+import { USDC, BRETT, Jupiterurl } from "@/const/const";
 
 interface RaydiumToken {
   symbol: string;
@@ -39,12 +39,9 @@ interface TokenInfo {
   logoURI: string;
 }
 
-// const url = "https://api-v3.raydium.io/mint/list";
-const url = "https://tokens.jup.ag/tokens?tags=lst,community";
-
 const fetchRaydiumTokens = async (): Promise<TokenInfo[]> => {
   try {
-    const response = await fetch(url);
+    const response = await fetch(Jupiterurl);
     // console.log("response", response);
     if (!response.ok) {
       throw new Error('Failed to fetch tokens');
