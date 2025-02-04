@@ -1,0 +1,10 @@
+export const USDC = "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913";
+
+export const BRETT = {
+  symbol: 'BRETT', 
+  name: 'Brett', 
+  mint: 'DxtssVdyYe4wWE5f5zEgx2NqtDFbVL3ABGY62WCycHWg', 
+  address: 'DxtssVdyYe4wWE5f5zEgx2NqtDFbVL3ABGY62WCycHWg', 
+  logoURI: 'https://gateway.irys.xyz/Lc1vGYEY45eezP3nJcHDbUFOpn0jEQeTvoJ8akpRkXQ'
+}
+
