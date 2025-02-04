@@ -8,3 +8,5 @@ export const BRETT = {
   logoURI: 'https://gateway.irys.xyz/Lc1vGYEY45eezP3nJcHDbUFOpn0jEQeTvoJ8akpRkXQ'
 }
 
+// const url = "https://api-v3.raydium.io/mint/list";
+export const Jupiterurl = "https://tokens.jup.ag/tokens?tags=lst,community";
