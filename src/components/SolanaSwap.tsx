@@ -14,6 +14,7 @@ import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { transfer } from "@/hooks/li-fi";
 import { swap_rango } from "@/hooks/rango";
+import { USDC, BRETT, Jupiterurl } from "@/const/const";
 
 interface RaydiumToken {
   symbol: string;
@@ -38,40 +39,30 @@ interface TokenInfo {
   logoURI: string;
 }
 
-// const url = "https://api-v3.raydium.io/mint/list";
-const url = "https://tokens.jup.ag/tokens?tags=lst,community";
-const BRETT: TokenInfo = {
-  symbol: 'BRETT', 
-  name: 'Brett', 
-  mint: 'DxtssVdyYe4wWE5f5zEgx2NqtDFbVL3ABGY62WCycHWg', 
-  address: 'DxtssVdyYe4wWE5f5zEgx2NqtDFbVL3ABGY62WCycHWg', 
-  logoURI: 'https://gateway.irys.xyz/Lc1vGYEY45eezP3nJcHDbUFOpn0jEQeTvoJ8akpRkXQ'
-}
-
 const fetchRaydiumTokens = async (): Promise<TokenInfo[]> => {
-  // try {
-  //   const response = await fetch(url);
-  //   // console.log("response", response);
-  //   if (!response.ok) {
-  //     throw new Error('Failed to fetch tokens');
-  //   }
-  //   const data = await response.json();
-  //   console.log("tokens list; ", data);
-  //   // Filter for meme coins and tokens with sufficient liquidity
-  //   return Object.values(data)
-  //     .filter((token: RaydiumToken) => token.symbol && token.symbol.trim() !== '')
-  //     .map((token: RaydiumToken) => ({
-  //       symbol: token.symbol,
-  //       name: token.name,
-  //       mint: token.address,
-  //       address: token.address,
-  //       logoURI: token.logoURI
-  //     }));
-  // } catch (error) {
-  //   console.error('Error fetching Raydium tokens:', error);
-  //   throw error;
-  // }
-  return [BRETT];
+  try {
+    const response = await fetch(Jupiterurl);
+    // console.log("response", response);
+    if (!response.ok) {
+      throw new Error('Failed to fetch tokens');
+    }
+    const data = await response.json();
+    console.log("tokens list; ", data);
+    // Filter for meme coins and tokens with sufficient liquidity
+    return Object.values(data)
+      .filter((token: RaydiumToken) => token.symbol && token.symbol.trim() !== '')
+      .map((token: RaydiumToken) => ({
+        symbol: token.symbol,
+        name: token.name,
+        mint: token.address,
+        address: token.address,
+        logoURI: token.logoURI
+      }));
+  } catch (error) {
+    console.error('Error fetching Raydium tokens:', error);
+    throw error;
+  }
+  // return [BRETT];
 };
 
 export const SolanaSwap = () => {
@@ -148,7 +139,6 @@ export const SolanaSwap = () => {
       });
       console.log("Selected Token:", selectedCoin, amount);
       const BUY_AMOUNT = Number(amount) * 1000000;
-      const USDC = "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913";
       const result = await swap_rango("BASE", "SOLANA", "USDC", selectedCoin.symbol, USDC, selectedCoin.mint, amount, receptionAddress);
       // const {result, tx} = await transfer("8453", "1151111081099710", USDC, selectedCoin.mint, BUY_AMOUNT, receptionAddress);
       // console.log(result, tx);
