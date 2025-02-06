@@ -3,67 +3,14 @@ import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 import { useToast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { CoinSelete } from "./SelectedCoin";
 import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { transfer } from "@/hooks/li-fi";
 import { swap_rango } from "@/hooks/rango";
-import { USDC, BRETT, Jupiterurl } from "@/const/const";
-
-interface RaydiumToken {
-  symbol: string;
-  name: string;
-  mint: string;
-  tags?: string[];
-  address: string;
-  logoURI: string;
-}
-
-interface RaydiumResponse {
-  tokens: {
-    [key: string]: RaydiumToken;
-  };
-}
-
-interface TokenInfo {
-  symbol: string;
-  name: string;
-  mint: string;
-  address: string;
-  logoURI: string;
-}
-
-const fetchRaydiumTokens = async (): Promise<TokenInfo[]> => {
-  try {
-    const response = await fetch(Jupiterurl);
-    // console.log("response", response);
-    if (!response.ok) {
-      throw new Error('Failed to fetch tokens');
-    }
-    const data = await response.json();
-    console.log("tokens list; ", data);
-    // Filter for meme coins and tokens with sufficient liquidity
-    return Object.values(data)
-      .filter((token: RaydiumToken) => token.symbol && token.symbol.trim() !== '')
-      .map((token: RaydiumToken) => ({
-        symbol: token.symbol,
-        name: token.name,
-        mint: token.address,
-        address: token.address,
-        logoURI: token.logoURI
-      }));
-  } catch (error) {
-    console.error('Error fetching Raydium tokens:', error);
-    throw error;
-  }
-  // return [BRETT];
-};
+import { USDC } from "@/const/const";
+import { TokenInfo } from "@/type/interface";
+import { fetchRaydiumTokens } from "@/hooks/fetchToken";
 
 export const SolanaSwap = () => {
   const { connection } = useConnection();
@@ -84,7 +31,7 @@ export const SolanaSwap = () => {
     queryFn: fetchRaydiumTokens,
   });
   const [filteredCoins, setFilteredCoins] = useState(memeCoins);
-  // console.log("coins list:", memeCoins, filteredCoins);
+
   useEffect(() => {
     setFilteredCoins(memeCoins);
   }, [memeCoins]);
@@ -96,22 +43,6 @@ export const SolanaSwap = () => {
     );
     setFilteredCoins(filtered);
   }, [searchQuery]);
-
-  // const checkUSDCBalance = async () => {
-  //   if (!publicKey) {
-  //     toast({
-  //       title: "Wallet not connected",
-  //       description: "Please connect your wallet first",
-  //       variant: "destructive",
-  //     });
-  //     return;
-  //   }
-
-  //   toast({
-  //     title: "Balance Check",
-  //     description: "USDC Balance check would happen here",
-  //   });
-  // };
 
   const handleSwap = async () => {
     if (!receptionAddress) {
@@ -169,7 +100,17 @@ export const SolanaSwap = () => {
       <h2 className="text-2xl font-bold">Swap USDC to Meme Coins</h2>
       
       <div className="w-full max-w-md space-y-4">
-        {/* <WalletMultiButton className="w-full" /> */}
+        <div className="space-y-2">
+          <label className="text-sm font-medium">Select Base Chain Coin</label>
+          <CoinSelete 
+            selectedCoin={selectedCoin} 
+            setSelectedCoin={setSelectedCoin} 
+            searchQuery={searchQuery} 
+            setSearchQuery={setSearchQuery} 
+            filteredCoins={filteredCoins}
+            placeholder={"Select Base Chain Coin"}
+          />
+        </div>
         <input
           type="text"
           value={receptionAddress}
@@ -178,48 +119,15 @@ export const SolanaSwap = () => {
           className="w-full rounded-md border border-input bg-background px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
         />
         <div className="space-y-2">
-          <label className="text-sm font-medium">Select Meme Coin</label>
-          <Select value={selectedCoin} onValueChange={setSelectedCoin}>
-            <SelectTrigger className="w-full">
-              <SelectValue>
-                {selectedCoin.symbol !=="" ? (
-                  <div className="flex items-center">
-                    <img
-                      src={selectedCoin.logoURI}
-                      alt={selectedCoin.name}
-                      className="h-5 w-5 rounded-full mr-2"
-                    />
-                    {selectedCoin.name} ({selectedCoin.symbol})
-                  </div>
-                ) : (
-                  <span className="text-gray-500">Select a meme coin</span> // Placeholder
-                )}
-              </SelectValue>
-            </SelectTrigger>
-            <SelectContent>
-              <div className="sticky top-0 z-10 bg-popover p-2">
-                <input
-                  type="text"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Search coins..."
-                  className="w-full rounded-md border border-input bg-background px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
-                />
-              </div>
-              {filteredCoins?.map((coin) => (
-                <SelectItem key={coin.mint} value={coin}>
-                  <div className="flex items-center">
-                    <img
-                      src={coin.logoURI}
-                      alt={coin.name}
-                      className="h-5 w-5 rounded-full mr-2"
-                    />
-                    {coin.name} ({coin.symbol})
-                  </div>
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          <label className="text-sm font-medium">Select Solana Meme Coin</label>
+          <CoinSelete 
+            selectedCoin={selectedCoin} 
+            setSelectedCoin={setSelectedCoin} 
+            searchQuery={searchQuery} 
+            setSearchQuery={setSearchQuery} 
+            filteredCoins={filteredCoins}
+            placeholder={"Select Solana Meme Coin"}
+          />
         </div>
 
         <div className="space-y-2">
