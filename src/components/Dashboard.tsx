@@ -1,6 +1,6 @@
 
 import { useWallet } from "@solana/wallet-adapter-react";
-import { Search, Moon, Rocket, Fire, Star } from "lucide-react";
+import { Search, Moon, Rocket, Flame, Star } from "lucide-react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
@@ -59,7 +59,7 @@ export const Dashboard = () => {
               <Rocket className="h-4 w-4" /> Top Movers
             </Button>
             <Button variant="outline" className="flex items-center gap-2">
-              <Fire className="h-4 w-4" /> Trending
+              <Flame className="h-4 w-4" /> Trending
             </Button>
             <Button variant="outline" className="flex items-center gap-2">
               <Star className="h-4 w-4" /> New Listings
