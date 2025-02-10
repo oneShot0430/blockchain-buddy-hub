@@ -9,6 +9,8 @@ export const BRETT = {
 }
 
 // const url = "https://api-v3.raydium.io/mint/list";
-export const Jupiterurl = "https://tokens.jup.ag/tokens?tags=lst,community";
+// export const Jupiterurl = "https://tokens.jup.ag/tokens?tags=lst,community";
+export const Jupiterurl = "https://tokens.jup.ag/tokens?tags=lst";
+
 
 export const BASE_TOKEN_LIST_URL = "https://raw.githubusercontent.com/Uniswap/default-token-list/main/src/tokens/base.json";
