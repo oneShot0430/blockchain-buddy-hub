@@ -11,7 +11,7 @@ import { transfer } from "@/hooks/li-fi";
 import { swap_rango } from "@/hooks/rango";
 import { USDC } from "@/const/const";
 import { TokenInfo } from "@/type/interface";
-import { fetchRaydiumTokens } from "@/hooks/fetchToken";
+import { fetchRaydiumTokens, fetchBaseTokenList } from "@/hooks/fetchToken";
 
 export const SolanaSwap = () => {
   const { connection } = useConnection();
@@ -26,16 +26,38 @@ export const SolanaSwap = () => {
     address: "",
     logoURI: ""
   });
+  const [selectedBaseCoin, setSelectedBaseCoin] = useState<TokenInfo>({
+    symbol: "",
+    name: "",
+    mint: "",
+    address: "",
+    logoURI: ""
+  });
   const [searchQuery, setSearchQuery] = useState("");
+  const [searchQueryOnBase, setSearchQueryOnBase] = useState("");
+
   const { data: memeCoins, isLoading, error } = useQuery({
     queryKey: ['raydiumTokens'],
     queryFn: fetchRaydiumTokens,
   });
+
+  const { data: BaseTokens, isLoading: isBaseCoinFetchLoading, error: baseCoinFetchError } = useQuery({
+    queryKey: ['BaseTokens'],
+    queryFn: fetchBaseTokenList,
+  });
+
   const [filteredCoins, setFilteredCoins] = useState(memeCoins);
+
+  const [filteredBaseCoins, setFilteredBaseCoins] = useState(BaseTokens);
 
   useEffect(() => {
     setFilteredCoins(memeCoins);
   }, [memeCoins]);
+
+  useEffect(() => {
+    console.log("BaseTokens", BaseTokens);
+    setFilteredBaseCoins(BaseTokens);
+  }, [BaseTokens]);
 
   useEffect(() => {
     const filtered = memeCoins?.filter((coin) =>
@@ -44,6 +66,14 @@ export const SolanaSwap = () => {
     );
     setFilteredCoins(filtered);
   }, [searchQuery]);
+
+  useEffect(() => {
+    const filtered = BaseTokens?.filter((coin) =>
+      coin.name.toLowerCase().includes(searchQueryOnBase.toLowerCase()) ||
+      coin.symbol.toLowerCase().includes(searchQueryOnBase.toLowerCase())
+    );
+    setFilteredBaseCoins(filtered);
+  }, [searchQueryOnBase]);
 
   const handleSwap = async () => {
     if (!receptionAddress) {
@@ -86,11 +116,11 @@ export const SolanaSwap = () => {
     }
   };
 
-  if (isLoading) {
+  if (isLoading || isBaseCoinFetchLoading) {
     return <div className="text-center p-4">Loading coins...</div>;
   }
 
-  if (error) {
+  if (error || baseCoinFetchError) {
     return <div className="text-center text-red-500 p-4">Error loading coins</div>;
   }
 
@@ -102,11 +132,11 @@ export const SolanaSwap = () => {
         <div className="space-y-2">
           <label className="text-sm font-medium text-gray-700">Select Base Chain Coin</label>
           <CoinSelete 
-            selectedCoin={selectedCoin} 
-            setSelectedCoin={setSelectedCoin} 
-            searchQuery={searchQuery} 
-            setSearchQuery={setSearchQuery} 
-            filteredCoins={filteredCoins}
+            selectedCoin={selectedBaseCoin} 
+            setSelectedCoin={setSelectedBaseCoin} 
+            searchQuery={searchQueryOnBase} 
+            setSearchQuery={setSearchQueryOnBase} 
+            filteredCoins={filteredBaseCoins}
             placeholder={"Select Base Chain Coin"}
           />
         </div>
