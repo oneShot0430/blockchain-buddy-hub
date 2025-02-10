@@ -1,5 +1,7 @@
+
 import { WalletConnect } from "@/components/WalletConnect";
 import { SolanaSwap } from "@/components/SolanaSwap";
+import { Dashboard } from "@/components/Dashboard";
 import {
   WalletProvider,
   ConnectionProvider,
@@ -8,7 +10,6 @@ import { WalletModalProvider } from "@solana/wallet-adapter-react-ui";
 import { clusterApiUrl } from "@solana/web3.js";
 import { PhantomWalletAdapter } from "@solana/wallet-adapter-wallets";
 import { useMemo } from "react";
-// Import Solana wallet adapter styles
 import "@solana/wallet-adapter-react-ui/styles.css";
 
 const Index = () => {
@@ -19,22 +20,28 @@ const Index = () => {
     <ConnectionProvider endpoint={endpoint}>
       <WalletProvider wallets={wallets} autoConnect>
         <WalletModalProvider>
-          <div className="min-h-screen flex flex-col items-center justify-center p-4 gap-8">
-            <div className="text-center">
-              <h1 className="text-4xl font-bold mb-2">ZEX BRIDGE</h1>
-              <p className="text-muted-foreground">
-                Connect your wallet and start transferring ETH or swap USDC for meme coins
-              </p>
-            </div>
-            
-            <WalletConnect />
-            
-            {/* <div className="w-full max-w-md">
-              <TransferForm />
-            </div> */}
+          <div className="min-h-screen">
+            <nav className="bg-white shadow">
+              <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="flex justify-between h-16">
+                  <div className="flex">
+                    <div className="flex-shrink-0 flex items-center">
+                      <h1 className="text-xl font-bold">ZEX BRIDGE</h1>
+                    </div>
+                  </div>
+                  <div className="flex items-center">
+                    <WalletConnect />
+                  </div>
+                </div>
+              </div>
+            </nav>
 
-            <div className="w-full max-w-md">
-              <SolanaSwap />
+            <Dashboard />
+
+            <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+              <div className="w-full max-w-md mx-auto">
+                <SolanaSwap />
+              </div>
             </div>
           </div>
         </WalletModalProvider>
