@@ -1,3 +1,4 @@
+
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 import { useToast } from "@/components/ui/use-toast";
@@ -71,8 +72,6 @@ export const SolanaSwap = () => {
       console.log("Selected Token:", selectedCoin, amount);
       const BUY_AMOUNT = Number(amount) * 1000000;
       const result = await swap_rango("BASE", "SOLANA", "USDC", selectedCoin.symbol, USDC, selectedCoin.mint, amount, receptionAddress);
-      // const {result, tx} = await transfer("8453", "1151111081099710", USDC, selectedCoin.mint, BUY_AMOUNT, receptionAddress);
-      // console.log(result, tx);
       toast({
         title: "Swap finished",
         description: result,
@@ -96,12 +95,12 @@ export const SolanaSwap = () => {
   }
 
   return (
-    <div className="flex flex-col items-center gap-6 p-6 rounded-lg border gradient-card text-card-foreground shadow-sm">
-      <h2 className="text-2xl font-bold">Swap USDC to Meme Coins</h2>
+    <div className="flex flex-col items-center gap-6 p-6 rounded-lg bg-white border border-gray-200 shadow-sm">
+      <h2 className="text-2xl font-bold text-gray-900">Swap USDC to Meme Coins</h2>
       
       <div className="w-full max-w-md space-y-4">
         <div className="space-y-2">
-          <label className="text-sm font-medium">Select Base Chain Coin</label>
+          <label className="text-sm font-medium text-gray-700">Select Base Chain Coin</label>
           <CoinSelete 
             selectedCoin={selectedCoin} 
             setSelectedCoin={setSelectedCoin} 
@@ -116,10 +115,10 @@ export const SolanaSwap = () => {
           value={receptionAddress}
           onChange={(e) => setReceptionAddress(e.target.value)}
           placeholder="Your Receiption Address..."
-          className="w-full rounded-md border border-input bg-background px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+          className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
         <div className="space-y-2">
-          <label className="text-sm font-medium">Select Solana Meme Coin</label>
+          <label className="text-sm font-medium text-gray-700">Select Solana Meme Coin</label>
           <CoinSelete 
             selectedCoin={selectedCoin} 
             setSelectedCoin={setSelectedCoin} 
@@ -131,26 +130,27 @@ export const SolanaSwap = () => {
         </div>
 
         <div className="space-y-2">
-          <label className="text-sm font-medium">Amount (USDC)</label>
+          <label className="text-sm font-medium text-gray-700">Amount (USDC)</label>
           <Input
             type="number"
             placeholder="Enter amount (min. 100 USDC)"
             value={amount}
             onChange={(e) => setAmount(e.target.value)}
             min="100"
+            className="bg-white"
           />
         </div>
 
         <Button 
           onClick={handleSwap}
-          className="w-full"
+          className="w-full bg-blue-600 hover:bg-blue-700 text-white"
           disabled={
             !receptionAddress 
             || !amount 
             || parseFloat(amount) < 100
           }
         >
-          Buy {selectedCoin.symbol}
+          Buy {selectedCoin.symbol || "Tokens"}
         </Button>
       </div>
     </div>
