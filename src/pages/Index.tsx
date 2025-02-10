@@ -28,39 +28,41 @@ const Index = () => {
     <ConnectionProvider endpoint={endpoint}>
       <WalletProvider wallets={wallets} autoConnect>
         <WalletModalProvider>
-          <div className={`min-h-screen ${isDarkMode ? 'dark' : ''} bg-gray-50`}>
-            <nav className="bg-white shadow">
-              <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="flex justify-between h-16">
-                  <div className="flex">
-                    <div className="flex-shrink-0 flex items-center">
-                      <h1 className="text-xl font-bold text-gray-900">ZEX BRIDGE</h1>
+          <div className={`min-h-screen ${isDarkMode ? 'dark' : ''}`}>
+            <div className="dark:bg-background">
+              <nav className="bg-white dark:bg-background/95 shadow dark:shadow-gray-800">
+                <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
+                  <div className="flex justify-between h-16">
+                    <div className="flex">
+                      <div className="flex-shrink-0 flex items-center">
+                        <h1 className="text-xl font-bold text-gray-900 dark:text-white">ZEX BRIDGE</h1>
+                      </div>
+                    </div>
+                    <div className="flex items-center space-x-4">
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={toggleTheme}
+                        className="rounded-full"
+                      >
+                        {isDarkMode ? (
+                          <Sun className="h-5 w-5" />
+                        ) : (
+                          <Moon className="h-5 w-5" />
+                        )}
+                      </Button>
+                      <WalletConnect />
                     </div>
                   </div>
-                  <div className="flex items-center space-x-4">
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={toggleTheme}
-                      className="rounded-full"
-                    >
-                      {isDarkMode ? (
-                        <Sun className="h-5 w-5" />
-                      ) : (
-                        <Moon className="h-5 w-5" />
-                      )}
-                    </Button>
-                    <WalletConnect />
-                  </div>
                 </div>
-              </div>
-            </nav>
+              </nav>
 
-            <Dashboard />
+              <Dashboard />
 
-            <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-              <div className="w-full max-w-md mx-auto">
-                <SolanaSwap />
+              <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                <div className="w-full max-w-md mx-auto">
+                  <SolanaSwap />
+                </div>
               </div>
             </div>
           </div>

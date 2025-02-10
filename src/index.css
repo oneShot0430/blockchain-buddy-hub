@@ -1,3 +1,4 @@
+
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
 @tailwind base;
@@ -29,11 +30,11 @@
   }
 
   .dark {
-    --background: 222 20% 18%;
+    --background: 222 20% 12%;
     --foreground: 0 0% 98%;
-    --card: 222 20% 18%;
+    --card: 222 20% 12%;
     --card-foreground: 0 0% 98%;
-    --popover: 222 20% 18%;
+    --popover: 222 20% 12%;
     --popover-foreground: 0 0% 98%;
     --primary: 0 0% 98%;
     --primary-foreground: 240 5.9% 10%;
