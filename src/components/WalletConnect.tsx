@@ -42,7 +42,7 @@ export const WalletConnect = () => {
   };
 
   return (
-    <div className="flex flex-col items-center gap-4">
+    <div className="flex items-center gap-4">
       <Button
         onClick={connectWallet}
         className="flex items-center gap-2 bg-primary hover:bg-primary/90"
