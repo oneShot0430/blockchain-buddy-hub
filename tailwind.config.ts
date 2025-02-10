@@ -37,7 +37,7 @@ export default {
         },
         background: {
           DEFAULT: "hsl(var(--background))",
-          dark: "hsl(240 10% 3.9%)",
+          dark: "hsl(222 20% 18%)",
         },
         foreground: {
           DEFAULT: "hsl(var(--foreground))",
