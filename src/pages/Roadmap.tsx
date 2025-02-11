@@ -39,7 +39,7 @@ const Roadmap = () => {
                   
                   <div className="space-y-6">
                     <div className="glass-morphism p-6 rounded-lg">
-                      <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">Q1 2024</h2>
+                      <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">Q1 2025</h2>
                       <ul className="space-y-3 text-gray-700 dark:text-gray-300">
                         <li>• Launch of ZEX Bridge Beta</li>
                         <li>• Initial Token Integration</li>
@@ -48,7 +48,7 @@ const Roadmap = () => {
                     </div>
 
                     <div className="glass-morphism p-6 rounded-lg">
-                      <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">Q2 2024</h2>
+                      <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">Q2 2025</h2>
                       <ul className="space-y-3 text-gray-700 dark:text-gray-300">
                         <li>• Advanced Trading Features</li>
                         <li>• Cross-chain Integration</li>
@@ -57,7 +57,7 @@ const Roadmap = () => {
                     </div>
 
                     <div className="glass-morphism p-6 rounded-lg">
-                      <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">Q3 2024</h2>
+                      <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">Q3 2025</h2>
                       <ul className="space-y-3 text-gray-700 dark:text-gray-300">
                         <li>• Mobile App Development</li>
                         <li>• DEX Aggregator Integration</li>
@@ -66,7 +66,7 @@ const Roadmap = () => {
                     </div>
 
                     <div className="glass-morphism p-6 rounded-lg">
-                      <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">Q4 2024</h2>
+                      <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">Q4 2025</h2>
                       <ul className="space-y-3 text-gray-700 dark:text-gray-300">
                         <li>• Global Marketing Campaign</li>
                         <li>• Enterprise Partnerships</li>
