@@ -4,8 +4,32 @@ import { Search, Moon, Rocket, Flame, Star } from "lucide-react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
+import { useQuery } from "@tanstack/react-query";
+import { fetchRaydiumTokens} from "@/hooks/fetchToken";
+import { useEffect } from "react";
+import { getTokenData } from "@/hooks/getTokenData";
 
 export const Dashboard = () => {
+
+  const { data: memeCoins, isLoading, error } = useQuery({
+    queryKey: ['raydiumTokens'],
+    queryFn: fetchRaydiumTokens,
+  });
+
+  useEffect(()=>{
+    if(!memeCoins) return;
+    const tokensymbols = memeCoins.map(token => token.symbol);
+    console.log(tokensymbols.join(","));
+    getTokenData(tokensymbols);
+  }, [memeCoins])
+  
+  if (isLoading) {
+    return <div className="text-center p-4">Loading coins...</div>;
+  }
+
+  if (error) {
+    return <div className="text-center text-red-500 p-4">Error loading coins</div>;
+  }
   return (
     <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       {/* Stats Grid */}
