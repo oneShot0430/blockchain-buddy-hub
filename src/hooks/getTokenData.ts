@@ -3,8 +3,7 @@ import axios from "axios";
 
 // Function to fetch token data from CoinMarketCap for Solana
 export const getTokenData = async (tokenSymbols: string[]) => {
-  const url = `https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest`;
-  console.log(tokenSymbols, url);
+  const url = `/api/v1/cryptocurrency/quotes/latest`;
   try {
     const response = await axios.get(url, {
       headers: {

@@ -19,7 +19,6 @@ export const Dashboard = () => {
   useEffect(()=>{
     if(!memeCoins) return;
     const tokensymbols = memeCoins.map(token => token.symbol);
-    console.log(tokensymbols.join(","));
     getTokenData(tokensymbols);
   }, [memeCoins])
   
