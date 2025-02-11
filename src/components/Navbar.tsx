@@ -40,6 +40,16 @@ export const Navbar = ({ isDarkMode, toggleTheme, currentPath }: NavbarProps) =>
               >
                 Trading
               </Link>
+              <Link
+                to="/roadmap"
+                className={`px-3 py-2 ${
+                  currentPath === "/roadmap"
+                    ? "text-gray-900 dark:text-white font-medium"
+                    : "text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white"
+                }`}
+              >
+                Roadmap
+              </Link>
             </div>
           </div>
           <div className="flex items-center space-x-4">
