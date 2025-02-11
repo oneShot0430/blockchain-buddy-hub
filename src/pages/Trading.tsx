@@ -1,6 +1,6 @@
 
 import { WalletConnect } from "@/components/WalletConnect";
-import { Dashboard } from "@/components/Dashboard";
+import { SolanaSwap } from "@/components/SolanaSwap";
 import { Moon, Sun } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -14,7 +14,7 @@ import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import "@solana/wallet-adapter-react-ui/styles.css";
 
-const Index = () => {
+const Trading = () => {
   const endpoint = useMemo(() => clusterApiUrl("devnet"), []);
   const wallets = useMemo(() => [new PhantomWalletAdapter()], []);
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -38,10 +38,10 @@ const Index = () => {
                         <h1 className="text-xl font-bold text-gray-900 dark:text-white">ZEX BRIDGE</h1>
                       </div>
                       <div className="hidden sm:flex sm:space-x-4">
-                        <Link to="/" className="px-3 py-2 text-gray-900 dark:text-white font-medium">
+                        <Link to="/" className="px-3 py-2 text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white">
                           Dashboard
                         </Link>
-                        <Link to="/trading" className="px-3 py-2 text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white">
+                        <Link to="/trading" className="px-3 py-2 text-gray-900 dark:text-white font-medium">
                           Trading
                         </Link>
                       </div>
@@ -65,7 +65,11 @@ const Index = () => {
                 </div>
               </nav>
 
-              <Dashboard />
+              <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                <div className="w-full max-w-md mx-auto">
+                  <SolanaSwap />
+                </div>
+              </div>
             </div>
           </div>
         </WalletModalProvider>
@@ -74,4 +78,4 @@ const Index = () => {
   );
 };
 
-export default Index;
+export default Trading;
