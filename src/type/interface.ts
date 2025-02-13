@@ -20,3 +20,43 @@ export interface TokenInfo {
   address: string;
   logoURI: string;
 }
+
+export interface CMCplatform {
+  id: number;
+  name: string;
+  symbol: string;
+  slug: string;
+  token_address: string;
+}
+
+export interface CMCquote {
+  USD: CMCquoteUSD;
+}
+
+export interface CMCquoteUSD {
+  price: number;
+  market_cap: number;
+  percent_change_24h : number;
+  percent_change_7d : number;
+  volume_24h: number;
+}
+
+export interface CMCData {
+  name: string;
+  symbol: string;
+  cmc_rank: number;
+  quote: CMCquote;
+  platform: CMCplatform;
+}
+
+export interface CMCResult {
+  name: string;
+  symbol: string,
+  contract: string,
+  price: number,
+  change_24h: number,
+  change_7d: number,
+  volume_24h: number,
+  market_cap: number,
+  social_score: number,
+}

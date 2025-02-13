@@ -5,12 +5,12 @@ export const fetchRaydiumTokens = async (): Promise<TokenInfo[]> => {
   console.log("fetchRaydiumTokens");
   try {
     const response = await fetch(Jupiterurl);
-
+    console.log(response);
     if (!response.ok) {
       throw new Error('Failed to fetch tokens');
     }
     const data = await response.json();
-
+    console.log(data);
     return Object.values(data)
       .filter((token: RaydiumToken) => token.symbol && token.symbol.trim() !== '')
       .map((token: RaydiumToken) => ({

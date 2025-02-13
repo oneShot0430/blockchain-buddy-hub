@@ -6,8 +6,10 @@ import { Input } from "./ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
 import { useQuery } from "@tanstack/react-query";
 import { fetchRaydiumTokens} from "@/hooks/fetchToken";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { getTokenData } from "@/hooks/getTokenData";
+import { CMCResult } from "@/type/interface";
+import { defaultData } from "@/const/const";
 
 export const Dashboard = () => {
 
@@ -16,10 +18,25 @@ export const Dashboard = () => {
     queryFn: fetchRaydiumTokens,
   });
 
+  const [coinData, setCoinData] = useState<any[]>(defaultData);
+
   useEffect(()=>{
-    if(!memeCoins) return;
-    const tokensymbols = memeCoins.map(token => token.symbol);
-    getTokenData(tokensymbols);
+    const fetchCMCData = async () =>{
+      if(!memeCoins || memeCoins.length === 0) return;
+      console.log(memeCoins);
+      const tokensymbols = memeCoins.map(token => token.symbol);
+      const cmcResult = await getTokenData(tokensymbols.slice(0, 200));
+      console.log("cmcResult:", cmcResult);
+      const updatedCMCResult = cmcResult.map((token: any) => {
+        const memeCoin = memeCoins.find(meme => meme.symbol === token.symbol);       
+        return {
+          ...token,
+          logo_uri: memeCoin?.logoURI || "",
+        };
+      });
+      setCoinData(updatedCMCResult);
+    }
+    fetchCMCData();
   }, [memeCoins])
   
   if (isLoading) {
@@ -134,12 +151,57 @@ export const Dashboard = () => {
                   Market Cap
                 </th>
                 <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Social Score
+                  CMC Ranking
                 </th>
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {/* Sample row - this would be mapped from actual data */}
+              {coinData?.map((data) => (
+                <tr>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="flex items-center">
+                      <div className="flex-shrink-0 h-10 w-10">
+                        {data?.logo_uri ? (
+                          <img
+                            src={data.logo_uri}
+                            alt={data.name}
+                            className="h-10 w-10 rounded-full object-cover"
+                          />
+                        ) : (
+                          <div className="h-10 w-10 rounded-full bg-gray-100" />
+                        )}
+                      </div>
+                      <div className="ml-4">
+                        <div className="font-medium text-gray-900">{data?.name}</div>
+                        <div className="text-sm text-gray-500">{data?.symbol}</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="text-sm text-gray-900">${data?.price}</div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className={`text-sm ${data?.change_24h < 0 ? "text-red-600" : "text-green-600"}`}>{data?.change_24h}</div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className={`text-sm ${data?.change_24h < 0 ? "text-red-600" : "text-green-600"}`}>{data?.change_7d}</div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="text-sm text-gray-900">${data?.volume_24h}</div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="text-sm text-gray-900">${data?.market_cap}</div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="flex items-center">
+                      <div className="h-2 w-24 bg-gray-200 rounded">
+                        <div className="h-2 bg-green-500 rounded" style={{ width: '85%' }} />
+                      </div>
+                      <span className="ml-2 text-sm text-gray-700">{data?.social_score}</span>
+                    </div>
+                  </td>
+                </tr>
+              ))}
               <tr>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="flex items-center">

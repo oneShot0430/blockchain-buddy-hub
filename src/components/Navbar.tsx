@@ -17,7 +17,7 @@ export const Navbar = ({ isDarkMode, toggleTheme, currentPath }: NavbarProps) =>
         <div className="flex justify-between h-16">
           <div className="flex items-center space-x-8">
             <div className="flex-shrink-0">
-              <h1 className="text-xl font-bold text-gray-900 dark:text-white">ZEX BRIDGE</h1>
+              <img src="/ZEX.png" alt="ZEX Bridge Logo" className="h-10 w-auto" />
             </div>
             <div className="hidden sm:flex sm:space-x-4">
               <Link
