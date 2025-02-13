@@ -1,43 +1,44 @@
-
 import { useWallet } from "@solana/wallet-adapter-react";
 import { Search, Moon, Rocket, Flame, Star } from "lucide-react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
 import { useQuery } from "@tanstack/react-query";
-import { fetchRaydiumTokens} from "@/hooks/fetchToken";
+import { fetchRaydiumTokens } from "@/hooks/fetchToken";
 import { useEffect, useState } from "react";
 import { getTokenData } from "@/hooks/getTokenData";
 import { CMCResult } from "@/type/interface";
 import { defaultData } from "@/const/const";
 
 export const Dashboard = () => {
-
   const { data: memeCoins, isLoading, error } = useQuery({
     queryKey: ['raydiumTokens'],
     queryFn: fetchRaydiumTokens,
   });
 
-  const [coinData, setCoinData] = useState<any[]>(defaultData);
+  const [coinData, setCoinData] = useState<CMCResult[]>(defaultData);
 
-  useEffect(()=>{
-    const fetchCMCData = async () =>{
-      if(!memeCoins || memeCoins.length === 0) return;
-      console.log(memeCoins);
+  useEffect(() => {
+    const fetchCMCData = async () => {
+      if (!memeCoins || memeCoins.length === 0) return;
+      console.log("Fetching data for tokens:", memeCoins);
       const tokensymbols = memeCoins.map(token => token.symbol);
       const cmcResult = await getTokenData(tokensymbols.slice(0, 200));
-      console.log("cmcResult:", cmcResult);
-      const updatedCMCResult = cmcResult.map((token: any) => {
-        const memeCoin = memeCoins.find(meme => meme.symbol === token.symbol);       
-        return {
-          ...token,
-          logo_uri: memeCoin?.logoURI || "",
-        };
-      });
-      setCoinData(updatedCMCResult);
-    }
+      console.log("CMC result:", cmcResult);
+      
+      if (cmcResult && cmcResult.length > 0) {
+        const updatedCMCResult = cmcResult.map((token: CMCResult) => {
+          const memeCoin = memeCoins.find(meme => meme.symbol === token.symbol);       
+          return {
+            ...token,
+            logo_uri: memeCoin?.logoURI || "",
+          };
+        });
+        setCoinData(updatedCMCResult);
+      }
+    };
     fetchCMCData();
-  }, [memeCoins])
+  }, [memeCoins]);
   
   if (isLoading) {
     return <div className="text-center p-4">Loading coins...</div>;
@@ -46,9 +47,9 @@ export const Dashboard = () => {
   if (error) {
     return <div className="text-center text-red-500 p-4">Error loading coins</div>;
   }
+
   return (
     <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      {/* Stats Grid */}
       <div className="bg-white rounded-lg shadow p-6 mb-8">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <div className="bg-green-50 rounded-lg p-4">
@@ -91,7 +92,6 @@ export const Dashboard = () => {
         </div>
       </div>
 
-      {/* Token Table */}
       <div className="bg-white rounded-lg shadow mb-8">
         <div className="p-4 border-b border-gray-200">
           <div className="flex flex-wrap gap-4 items-center">
@@ -156,8 +156,8 @@ export const Dashboard = () => {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {coinData?.map((data) => (
-                <tr>
+              {coinData.map((data, index) => (
+                <tr key={index}>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center">
                       <div className="flex-shrink-0 h-10 w-10">
