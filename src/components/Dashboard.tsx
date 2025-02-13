@@ -10,6 +10,14 @@ import { useEffect, useState } from "react";
 import { getTokenData } from "@/hooks/getTokenData";
 import { CMCResult } from "@/type/interface";
 import { defaultData } from "@/const/const";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 
 export const Dashboard = () => {
   const { data: memeCoins, isLoading, error } = useQuery({
@@ -18,13 +26,16 @@ export const Dashboard = () => {
   });
 
   const [coinData, setCoinData] = useState<CMCResult[]>(defaultData);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
 
   useEffect(() => {
     const fetchCMCData = async () => {
       if (!memeCoins || memeCoins.length === 0) return;
       console.log("Fetching data for tokens:", memeCoins);
       const tokensymbols = memeCoins.map(token => token.symbol);
-      const cmcResult = await getTokenData(tokensymbols.slice(0, 100));
+      const cmcResult = await getTokenData(tokensymbols.slice(0, 200));
       console.log("CMC result:", cmcResult);
       
       if (cmcResult && cmcResult.length > 0) {
@@ -40,6 +51,18 @@ export const Dashboard = () => {
     };
     fetchCMCData();
   }, [memeCoins]);
+
+  // Filter coins based on search query
+  const filteredCoins = coinData.filter(coin => 
+    coin.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    coin.symbol.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  // Calculate pagination
+  const totalPages = Math.ceil(filteredCoins.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const currentCoins = filteredCoins.slice(startIndex, endIndex);
   
   if (isLoading) {
     return <div className="text-center p-4">Loading coins...</div>;
@@ -95,37 +118,48 @@ export const Dashboard = () => {
 
       <div className="bg-white rounded-lg shadow mb-8">
         <div className="p-4 border-b border-gray-200">
-          <div className="flex flex-wrap gap-4 items-center">
-            <Button variant="default" className="flex items-center gap-2">
-              <Rocket className="h-4 w-4" /> Top Movers
-            </Button>
-            <Button variant="outline" className="flex items-center gap-2">
-              <Flame className="h-4 w-4" /> Trending
-            </Button>
-            <Button variant="outline" className="flex items-center gap-2">
-              <Star className="h-4 w-4" /> New Listings
-            </Button>
-            <Select>
-              <SelectTrigger className="w-[140px]">
-                <SelectValue placeholder="All Chains" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Chains</SelectItem>
-                <SelectItem value="solana">Solana</SelectItem>
-                <SelectItem value="ethereum">Ethereum</SelectItem>
-                <SelectItem value="bsc">BSC</SelectItem>
-              </SelectContent>
-            </Select>
-            <Select>
-              <SelectTrigger className="w-[100px]">
-                <SelectValue placeholder="24h" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="24h">24h</SelectItem>
-                <SelectItem value="7d">7d</SelectItem>
-                <SelectItem value="30d">30d</SelectItem>
-              </SelectContent>
-            </Select>
+          <div className="flex flex-wrap gap-4 items-center justify-between">
+            <div className="flex flex-wrap gap-4 items-center">
+              <Button variant="default" className="flex items-center gap-2">
+                <Rocket className="h-4 w-4" /> Top Movers
+              </Button>
+              <Button variant="outline" className="flex items-center gap-2">
+                <Flame className="h-4 w-4" /> Trending
+              </Button>
+              <Button variant="outline" className="flex items-center gap-2">
+                <Star className="h-4 w-4" /> New Listings
+              </Button>
+              <Select>
+                <SelectTrigger className="w-[140px]">
+                  <SelectValue placeholder="All Chains" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Chains</SelectItem>
+                  <SelectItem value="solana">Solana</SelectItem>
+                  <SelectItem value="ethereum">Ethereum</SelectItem>
+                  <SelectItem value="bsc">BSC</SelectItem>
+                </SelectContent>
+              </Select>
+              <Select>
+                <SelectTrigger className="w-[100px]">
+                  <SelectValue placeholder="24h" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="24h">24h</SelectItem>
+                  <SelectItem value="7d">7d</SelectItem>
+                  <SelectItem value="30d">30d</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="relative w-full md:w-64">
+              <Search className="absolute left-2 top-2.5 h-4 w-4 text-gray-500" />
+              <Input
+                placeholder="Search coins..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-8"
+              />
+            </div>
           </div>
         </div>
 
@@ -157,7 +191,7 @@ export const Dashboard = () => {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {coinData.map((data, index) => (
+              {currentCoins.map((data, index) => (
                 <tr key={index}>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center">
@@ -179,32 +213,68 @@ export const Dashboard = () => {
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-900">${data?.price}</div>
+                    <div className="text-sm text-gray-900">${data.price.toFixed(4)}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className={`text-sm ${data?.change_24h < 0 ? "text-red-600" : "text-green-600"}`}>{data?.change_24h}</div>
+                    <div className={`text-sm ${data.change_24h < 0 ? "text-red-600" : "text-green-600"}`}>
+                      {data.change_24h.toFixed(2)}%
+                    </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className={`text-sm ${data?.change_24h < 0 ? "text-red-600" : "text-green-600"}`}>{data?.change_7d}</div>
+                    <div className={`text-sm ${data.change_7d < 0 ? "text-red-600" : "text-green-600"}`}>
+                      {data.change_7d.toFixed(2)}%
+                    </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-900">${data?.volume_24h}</div>
+                    <div className="text-sm text-gray-900">${data.volume_24h.toLocaleString()}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-900">${data?.market_cap}</div>
+                    <div className="text-sm text-gray-900">${data.market_cap.toLocaleString()}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center">
                       <div className="h-2 w-24 bg-gray-200 rounded">
-                        <div className="h-2 bg-green-500 rounded" style={{ width: '85%' }} />
+                        <div 
+                          className="h-2 bg-green-500 rounded" 
+                          style={{ width: `${Math.min(100, (data.social_score / 100) * 100)}%` }} 
+                        />
                       </div>
-                      <span className="ml-2 text-sm text-gray-700">{data?.social_score}</span>
+                      <span className="ml-2 text-sm text-gray-700">{data.social_score}</span>
                     </div>
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
+        </div>
+
+        <div className="p-4 border-t border-gray-200">
+          <Pagination>
+            <PaginationContent>
+              <PaginationItem>
+                <PaginationPrevious 
+                  onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+                  className={currentPage === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
+                />
+              </PaginationItem>
+              {[...Array(totalPages)].map((_, i) => (
+                <PaginationItem key={i + 1}>
+                  <PaginationLink
+                    onClick={() => setCurrentPage(i + 1)}
+                    isActive={currentPage === i + 1}
+                  >
+                    {i + 1}
+                  </PaginationLink>
+                </PaginationItem>
+              ))}
+              <PaginationItem>
+                <PaginationNext 
+                  onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+                  className={currentPage === totalPages ? "pointer-events-none opacity-50" : "cursor-pointer"}
+                />
+              </PaginationItem>
+            </PaginationContent>
+          </Pagination>
         </div>
       </div>
     </div>
