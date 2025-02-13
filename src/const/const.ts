@@ -26,7 +26,7 @@ export const defaultData: CMCResult[] = [
 ];
 
 // const url = "https://api-v3.raydium.io/mint/list";
-export const Jupiterurl = "https://tokens.jup.ag/tokens?tags=lst,community";
+export const Jupiterurl = "https://tokens.jup.ag/tokens?tags=verified";
 // export const Jupiterurl = "https://tokens.jup.ag/tokens?tags=pump";
 
 

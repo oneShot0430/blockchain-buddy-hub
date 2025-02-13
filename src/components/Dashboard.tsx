@@ -24,7 +24,7 @@ export const Dashboard = () => {
       if (!memeCoins || memeCoins.length === 0) return;
       console.log("Fetching data for tokens:", memeCoins);
       const tokensymbols = memeCoins.map(token => token.symbol);
-      const cmcResult = await getTokenData(tokensymbols.slice(0, 200));
+      const cmcResult = await getTokenData(tokensymbols.slice(0, 100));
       console.log("CMC result:", cmcResult);
       
       if (cmcResult && cmcResult.length > 0) {
