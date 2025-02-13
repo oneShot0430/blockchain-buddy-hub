@@ -203,42 +203,6 @@ export const Dashboard = () => {
                   </td>
                 </tr>
               ))}
-              <tr>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="flex items-center">
-                    <div className="flex-shrink-0 h-10 w-10">
-                      <div className="h-10 w-10 rounded-full bg-gray-100" />
-                    </div>
-                    <div className="ml-4">
-                      <div className="font-medium text-gray-900">BONK</div>
-                      <div className="text-sm text-gray-500">Bonk</div>
-                    </div>
-                  </div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm text-gray-900">$0.00001234</div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm text-green-600">+12.5%</div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm text-green-600">+45.2%</div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm text-gray-900">$1.2B</div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm text-gray-900">$11.5B</div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="flex items-center">
-                    <div className="h-2 w-24 bg-gray-200 rounded">
-                      <div className="h-2 bg-green-500 rounded" style={{ width: '85%' }} />
-                    </div>
-                    <span className="ml-2 text-sm text-gray-700">85</span>
-                  </div>
-                </td>
-              </tr>
             </tbody>
           </table>
         </div>
