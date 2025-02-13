@@ -1,3 +1,4 @@
+
 import { useWallet } from "@solana/wallet-adapter-react";
 import { Search, Moon, Rocket, Flame, Star } from "lucide-react";
 import { Button } from "./ui/button";
@@ -161,7 +162,7 @@ export const Dashboard = () => {
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center">
                       <div className="flex-shrink-0 h-10 w-10">
-                        {data?.logo_uri ? (
+                        {data.logo_uri ? (
                           <img
                             src={data.logo_uri}
                             alt={data.name}
@@ -172,8 +173,8 @@ export const Dashboard = () => {
                         )}
                       </div>
                       <div className="ml-4">
-                        <div className="font-medium text-gray-900">{data?.name}</div>
-                        <div className="text-sm text-gray-500">{data?.symbol}</div>
+                        <div className="font-medium text-gray-900">{data.name}</div>
+                        <div className="text-sm text-gray-500">{data.symbol}</div>
                       </div>
                     </div>
                   </td>

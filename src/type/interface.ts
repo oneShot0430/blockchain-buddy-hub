@@ -1,3 +1,4 @@
+
 export interface RaydiumToken {
   symbol: string;
   name: string;
@@ -51,12 +52,13 @@ export interface CMCData {
 
 export interface CMCResult {
   name: string;
-  symbol: string,
-  contract: string,
-  price: number,
-  change_24h: number,
-  change_7d: number,
-  volume_24h: number,
-  market_cap: number,
-  social_score: number,
+  symbol: string;
+  contract: string;
+  price: number;
+  change_24h: number;
+  change_7d: number;
+  volume_24h: number;
+  market_cap: number;
+  social_score: number;
+  logo_uri?: string; // Added this property as optional
 }
