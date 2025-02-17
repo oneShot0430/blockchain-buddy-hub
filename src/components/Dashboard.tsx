@@ -28,19 +28,28 @@ export const Dashboard = () => {
   const [coinData, setCoinData] = useState<CMCResult[]>(defaultData);
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
+  const [totalPages, setTotalPages] = useState(1);
+
+  const itemsPerPage = 50;
 
   useEffect(() => {
     const fetchCMCData = async () => {
       if (!memeCoins || memeCoins.length === 0) return;
       console.log("Fetching data for tokens:", memeCoins);
-      const tokensymbols = memeCoins.map(token => token.symbol);
-      const cmcResult = await getTokenData(tokensymbols.slice(0, 100));
+      const filteredCoins = memeCoins.filter(coin => 
+        coin.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        coin.symbol.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+      setTotalPages(Math.ceil(filteredCoins.length / itemsPerPage));
+      const startIndex = (currentPage - 1) * itemsPerPage;
+      const endIndex = startIndex + itemsPerPage;
+      const tokensymbols = filteredCoins.map(token => token.symbol);
+      const cmcResult = await getTokenData(tokensymbols.slice(startIndex, endIndex));
       console.log("CMC result:", cmcResult);
       
       if (cmcResult && cmcResult.length > 0) {
         const updatedCMCResult = cmcResult.map((token: CMCResult) => {
-          const memeCoin = memeCoins.find(meme => meme.symbol === token.symbol);       
+          const memeCoin = filteredCoins.find(meme => meme.symbol === token.symbol);       
           return {
             ...token,
             logo_uri: memeCoin?.logoURI || "",
@@ -50,19 +59,18 @@ export const Dashboard = () => {
       }
     };
     fetchCMCData();
-  }, [memeCoins]);
+  }, [memeCoins, searchQuery, currentPage]);
 
-  // Filter coins based on search query
-  const filteredCoins = coinData.filter(coin => 
-    coin.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    coin.symbol.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  // // Filter coins based on search query
+  // const filteredCoins = coinData.filter(coin => 
+  //   coin.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+  //   coin.symbol.toLowerCase().includes(searchQuery.toLowerCase())
+  // );
 
-  // Calculate pagination
-  const totalPages = Math.ceil(filteredCoins.length / itemsPerPage);
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-  const currentCoins = filteredCoins.slice(startIndex, endIndex);
+  // // Calculate pagination
+  // const startIndex = (currentPage - 1) * itemsPerPage;
+  // const endIndex = startIndex + itemsPerPage;
+  // const currentCoins = filteredCoins.slice(startIndex, endIndex);
   
   if (isLoading) {
     return <div className="text-center p-4">Loading coins...</div>;
@@ -191,7 +199,7 @@ export const Dashboard = () => {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {currentCoins.map((data, index) => (
+              {coinData.map((data, index) => (
                 <tr key={index}>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center">
