@@ -1,4 +1,3 @@
-
 import { useWallet } from "@solana/wallet-adapter-react";
 import { Search, Moon, Rocket, Flame, Star } from "lucide-react";
 import { Button } from "./ui/button";
@@ -61,17 +60,53 @@ export const Dashboard = () => {
     fetchCMCData();
   }, [memeCoins, searchQuery, currentPage]);
 
-  // // Filter coins based on search query
-  // const filteredCoins = coinData.filter(coin => 
-  //   coin.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-  //   coin.symbol.toLowerCase().includes(searchQuery.toLowerCase())
-  // );
+  const getPageNumbers = () => {
+    const visiblePages = 5; // Number of visible page numbers
+    const pages = [];
+    
+    if (totalPages <= visiblePages) {
+      return Array.from({ length: totalPages }, (_, i) => i + 1);
+    }
 
-  // // Calculate pagination
-  // const startIndex = (currentPage - 1) * itemsPerPage;
-  // const endIndex = startIndex + itemsPerPage;
-  // const currentCoins = filteredCoins.slice(startIndex, endIndex);
-  
+    // Always show first page
+    pages.push(1);
+
+    let startPage = Math.max(2, currentPage - 1);
+    let endPage = Math.min(totalPages - 1, currentPage + 1);
+
+    // Adjust if we're near the start
+    if (currentPage <= 3) {
+      endPage = Math.min(visiblePages - 1, totalPages - 1);
+    }
+
+    // Adjust if we're near the end
+    if (currentPage >= totalPages - 2) {
+      startPage = Math.max(2, totalPages - 3);
+    }
+
+    // Add ellipsis after first page if needed
+    if (startPage > 2) {
+      pages.push('...');
+    }
+
+    // Add middle pages
+    for (let i = startPage; i <= endPage; i++) {
+      pages.push(i);
+    }
+
+    // Add ellipsis before last page if needed
+    if (endPage < totalPages - 1) {
+      pages.push('...');
+    }
+
+    // Always show last page
+    if (totalPages > 1) {
+      pages.push(totalPages);
+    }
+
+    return pages;
+  };
+
   if (isLoading) {
     return <div className="text-center p-4">Loading coins...</div>;
   }
@@ -265,14 +300,19 @@ export const Dashboard = () => {
                   className={currentPage === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
                 />
               </PaginationItem>
-              {[...Array(totalPages)].map((_, i) => (
-                <PaginationItem key={i + 1}>
-                  <PaginationLink
-                    onClick={() => setCurrentPage(i + 1)}
-                    isActive={currentPage === i + 1}
-                  >
-                    {i + 1}
-                  </PaginationLink>
+              {getPageNumbers().map((page, index) => (
+                <PaginationItem key={index}>
+                  {page === '...' ? (
+                    <span className="px-4 py-2">...</span>
+                  ) : (
+                    <PaginationLink
+                      onClick={() => typeof page === 'number' && setCurrentPage(page)}
+                      isActive={currentPage === page}
+                      className={typeof page === 'number' ? 'cursor-pointer' : ''}
+                    >
+                      {page}
+                    </PaginationLink>
+                  )}
                 </PaginationItem>
               ))}
               <PaginationItem>
