@@ -59,48 +59,44 @@ export const Dashboard = () => {
   }, [memeCoins, searchQuery, currentPage]);
 
   useEffect(() => {
-    setTotalToken(memeCoins.length);
-  }, [memeCoins])
+    if (memeCoins) {
+      setTotalToken(memeCoins.length);
+    }
+  }, [memeCoins]);
+
   const getPageNumbers = () => {
-    const visiblePages = 5; // Number of visible page numbers
+    const visiblePages = 5;
     const pages = [];
     
     if (totalPages <= visiblePages) {
       return Array.from({ length: totalPages }, (_, i) => i + 1);
     }
 
-    // Always show first page
     pages.push(1);
 
     let startPage = Math.max(2, currentPage - 1);
     let endPage = Math.min(totalPages - 1, currentPage + 1);
 
-    // Adjust if we're near the start
     if (currentPage <= 3) {
       endPage = Math.min(visiblePages - 1, totalPages - 1);
     }
 
-    // Adjust if we're near the end
     if (currentPage >= totalPages - 2) {
       startPage = Math.max(2, totalPages - 3);
     }
 
-    // Add ellipsis after first page if needed
     if (startPage > 2) {
       pages.push('...');
     }
 
-    // Add middle pages
     for (let i = startPage; i <= endPage; i++) {
       pages.push(i);
     }
 
-    // Add ellipsis before last page if needed
     if (endPage < totalPages - 1) {
       pages.push('...');
     }
 
-    // Always show last page
     if (totalPages > 1) {
       pages.push(totalPages);
     }
