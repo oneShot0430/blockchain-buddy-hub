@@ -1,5 +1,5 @@
 import { useWallet } from "@solana/wallet-adapter-react";
-import { Search, Moon, Rocket, Flame, Star } from "lucide-react";
+import { Search, Moon, Rocket, Flame, Star, ArrowUp, ArrowDown } from "lucide-react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
@@ -256,13 +256,23 @@ export const Dashboard = () => {
                     <div className="text-sm text-gray-900">${data.price.toFixed(4)}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className={`text-sm ${data.change_24h < 0 ? "text-red-600" : "text-green-600"}`}>
-                      {data.change_24h.toFixed(2)}%
+                    <div className={`text-sm flex items-center gap-1 ${data.change_24h < 0 ? "text-red-600" : "text-green-600"}`}>
+                      {data.change_24h < 0 ? (
+                        <ArrowDown className="h-4 w-4" />
+                      ) : (
+                        <ArrowUp className="h-4 w-4" />
+                      )}
+                      {Math.abs(data.change_24h).toFixed(2)}%
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className={`text-sm ${data.change_7d < 0 ? "text-red-600" : "text-green-600"}`}>
-                      {data.change_7d.toFixed(2)}%
+                    <div className={`text-sm flex items-center gap-1 ${data.change_7d < 0 ? "text-red-600" : "text-green-600"}`}>
+                      {data.change_7d < 0 ? (
+                        <ArrowDown className="h-4 w-4" />
+                      ) : (
+                        <ArrowUp className="h-4 w-4" />
+                      )}
+                      {Math.abs(data.change_7d).toFixed(2)}%
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
