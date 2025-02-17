@@ -28,13 +28,12 @@ export const Dashboard = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-
+  const [totalToken, setTotalToken] = useState(0);
   const itemsPerPage = 50;
 
   useEffect(() => {
     const fetchCMCData = async () => {
       if (!memeCoins || memeCoins.length === 0) return;
-      console.log("Fetching data for tokens:", memeCoins);
       const filteredCoins = memeCoins.filter(coin => 
         coin.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         coin.symbol.toLowerCase().includes(searchQuery.toLowerCase())
@@ -44,7 +43,6 @@ export const Dashboard = () => {
       const endIndex = startIndex + itemsPerPage;
       const tokensymbols = filteredCoins.map(token => token.symbol);
       const cmcResult = await getTokenData(tokensymbols.slice(startIndex, endIndex));
-      console.log("CMC result:", cmcResult);
       
       if (cmcResult && cmcResult.length > 0) {
         const updatedCMCResult = cmcResult.map((token: CMCResult) => {
@@ -60,6 +58,9 @@ export const Dashboard = () => {
     fetchCMCData();
   }, [memeCoins, searchQuery, currentPage]);
 
+  useEffect(() => {
+    setTotalToken(memeCoins.length);
+  }, [memeCoins])
   const getPageNumbers = () => {
     const visiblePages = 5; // Number of visible page numbers
     const pages = [];
@@ -152,7 +153,7 @@ export const Dashboard = () => {
           <div className="bg-orange-50 rounded-lg p-4">
             <div className="text-sm text-orange-600 font-medium">Total Tracked</div>
             <div className="mt-2">
-              <div className="font-semibold text-2xl">2,451</div>
+              <div className="font-semibold text-2xl">{totalToken}</div>
               <div className="text-orange-600 text-sm">Active Tokens</div>
             </div>
           </div>
