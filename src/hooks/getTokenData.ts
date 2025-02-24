@@ -54,13 +54,14 @@ export const getTokenData = async (tokenSymbols: string[]) : Promise<CMCResult[]
   }
 };
 
-export const fetchHistoricalData = async (tokenName: string): Promise<{ time: string; price: number }[]> => {
+export const fetchHistoricalData = async (tokenName: string): Promise<{formattedData: { time: string; price: number }[]; logo_uri: string }> => {
   try {
     // Fetch historical data from CoinGecko API
     console.log("tokenId:", tokenName);
     const coins = await axios.get(`https://api.coingecko.com/api/v3/search?query=${tokenName}`);
     console.log(coins.data.coins[0]);
     const tokenId = coins.data.coins[0].id;
+    const logo_uri = coins.data.coins[0].thumb;
     const response = await axios.get(
       `https://api.coingecko.com/api/v3/coins/${tokenId}/market_chart`,
       {
@@ -80,9 +81,9 @@ export const fetchHistoricalData = async (tokenName: string): Promise<{ time: st
       price: price[1], // Extract the price
     }));
 
-    return formattedData;
+    return {formattedData, logo_uri} ;
   } catch (error) {
-    console.error("Error fetching historical data:", error.message);
-    return []; // Return an empty array in case of error
+    console.error("Error fetching historical data:", error instanceof Error ? error.message : error);
+    return { formattedData: [], logo_uri: '' };
   }
 };

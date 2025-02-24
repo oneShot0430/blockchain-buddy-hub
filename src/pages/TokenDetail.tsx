@@ -25,7 +25,7 @@ const TokenDetail = () => {
   const [maxPrice, setMaxPrice] = useState<number>(1);
   const [showBuyDialog, setShowBuyDialog] = useState(false);
   const [amount, setAmount] = useState("");
-
+  const [logoUri, setLogoUri] = useState("");
   useEffect(() => {
     const fetchToken = async () => {
       if (symbol) {
@@ -33,8 +33,9 @@ const TokenDetail = () => {
         console.log(data);
         if (data.length > 0) {
           setTokenData(data[0]);
-          const historicalData = await fetchHistoricalData(data[0].symbol);
-          setChartData(historicalData);
+          const {formattedData, logo_uri} = await fetchHistoricalData(data[0].symbol);
+          setChartData(formattedData);
+          setLogoUri(logo_uri);
         }
       }
     };
@@ -94,9 +95,9 @@ const TokenDetail = () => {
             </DialogHeader>
             <div className="space-y-6">
               <div className="flex items-center space-x-4 p-4 bg-gray-50 rounded-lg">
-                {tokenData.logo_uri && (
+                {logoUri && (
                   <img
-                    src={tokenData.logo_uri}
+                    src={logoUri}
                     alt={tokenData.name}
                     className="w-10 h-10 rounded-full"
                   />
@@ -189,9 +190,9 @@ const TokenDetail = () => {
 
         <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
           <div className="flex items-center gap-4 mb-6">
-            {tokenData.logo_uri && (
+            {logoUri && (
               <img
-                src={tokenData.logo_uri}
+                src={logoUri}
                 alt={tokenData.name}
                 className="w-16 h-16 rounded-full"
               />
