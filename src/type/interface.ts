@@ -43,6 +43,7 @@ export interface CMCquoteUSD {
 }
 
 export interface CMCData {
+  id: number;
   name: string;
   symbol: string;
   cmc_rank: number;
@@ -51,6 +52,7 @@ export interface CMCData {
 }
 
 export interface CMCResult {
+  id: number;
   name: string;
   symbol: string;
   contract: string;

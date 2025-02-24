@@ -4,27 +4,42 @@ import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ArrowLeft } from "lucide-react";
-import { getTokenData } from "@/hooks/getTokenData";
+import { getTokenData, fetchHistoricalData } from "@/hooks/getTokenData";
 import { CMCResult } from "@/type/interface";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { min, max } from "lodash";
 
 const TokenDetail = () => {
   const { symbol } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
   const [tokenData, setTokenData] = useState<CMCResult | null>(null);
+  const [chartData, setChartData] = useState<{ time: string; price: number }[]>([]);
+  const [minPrice, setMinPrice] = useState<number>(0);
+  const [maxPrice, setMaxPrice] = useState<number>(1);
 
   useEffect(() => {
     const fetchToken = async () => {
       if (symbol) {
         const data = await getTokenData([symbol]);
+        console.log(data);
         if (data.length > 0) {
           setTokenData(data[0]);
+          const historicalData = await fetchHistoricalData(data[0].symbol);
+          setChartData(historicalData);
         }
       }
     };
     fetchToken();
   }, [symbol]);
+
+  useEffect(() => {
+    const minPrice = min(chartData.map((d) => d.price));
+    const maxPrice = max(chartData.map((d) => d.price));
+    console.log(minPrice, maxPrice);
+    setMinPrice(minPrice);
+    setMaxPrice(maxPrice);
+  }, [chartData])
 
   const handleBack = () => {
     if (location.key === "default") {
@@ -50,13 +65,13 @@ const TokenDetail = () => {
   }
 
   // Dummy data for the chart
-  const chartData = [
-    { time: '1D', price: tokenData.price * 0.95 },
-    { time: '2D', price: tokenData.price * 0.98 },
-    { time: '3D', price: tokenData.price * 1.02 },
-    { time: '4D', price: tokenData.price * 1.01 },
-    { time: '5D', price: tokenData.price },
-  ];
+  // const chartData = [
+  //   { time: '1D', price: tokenData.price * 0.95 },
+  //   { time: '2D', price: tokenData.price * 0.98 },
+  //   { time: '3D', price: tokenData.price * 1.02 },
+  //   { time: '4D', price: tokenData.price * 1.01 },
+  //   { time: '5D', price: tokenData.price },
+  // ];
 
   return (
     <div className="min-h-screen bg-gray-50 p-8">
@@ -117,13 +132,14 @@ const TokenDetail = () => {
                   <LineChart data={chartData}>
                     <CartesianGrid strokeDasharray="3 3" />
                     <XAxis dataKey="time" />
-                    <YAxis />
+                    <YAxis domain={[minPrice * 0.99, maxPrice * 1.01]} />
                     <Tooltip />
                     <Line
                       type="monotone"
                       dataKey="price"
                       stroke="#8884d8"
                       strokeWidth={2}
+                      dot={false}
                     />
                   </LineChart>
                 </ResponsiveContainer>
