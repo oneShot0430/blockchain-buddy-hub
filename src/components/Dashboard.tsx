@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 import { getTokenData } from "@/hooks/getTokenData";
 import { CMCResult } from "@/type/interface";
 import { defaultData } from "@/const/const";
+import { useNavigate } from "react-router-dom";
 import {
   Pagination,
   PaginationContent,
@@ -19,6 +20,7 @@ import {
 } from "@/components/ui/pagination";
 
 export const Dashboard = () => {
+  const navigate = useNavigate();
   const { data: memeCoins, isLoading, error } = useQuery({
     queryKey: ['raydiumTokens'],
     queryFn: fetchRaydiumTokens,
@@ -30,6 +32,10 @@ export const Dashboard = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [totalToken, setTotalToken] = useState(0);
   const itemsPerPage = 50;
+
+  const handleTokenClick = (symbol: string) => {
+    navigate(`/token/${symbol}`);
+  };
 
   useEffect(() => {
     const fetchCMCData = async () => {
@@ -232,7 +238,11 @@ export const Dashboard = () => {
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
               {coinData.map((data, index) => (
-                <tr key={index}>
+                <tr 
+                  key={index} 
+                  onClick={() => handleTokenClick(data.symbol)}
+                  className="cursor-pointer hover:bg-gray-50 transition-colors"
+                >
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center">
                       <div className="flex-shrink-0 h-10 w-10">
