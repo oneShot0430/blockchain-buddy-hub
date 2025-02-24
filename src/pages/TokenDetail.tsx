@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ArrowLeft } from "lucide-react";
@@ -11,6 +11,7 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 const TokenDetail = () => {
   const { symbol } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
   const [tokenData, setTokenData] = useState<CMCResult | null>(null);
 
   useEffect(() => {
@@ -25,11 +26,21 @@ const TokenDetail = () => {
     fetchToken();
   }, [symbol]);
 
+  const handleBack = () => {
+    if (location.key === "default") {
+      // If there's no history (user landed directly on this page), go to home
+      navigate("/");
+    } else {
+      // Go back to the previous page in history
+      navigate(-1);
+    }
+  };
+
   if (!tokenData) {
     return (
       <div className="min-h-screen bg-gray-50 p-8">
         <div className="max-w-6xl mx-auto">
-          <Button variant="ghost" onClick={() => navigate(-1)} className="mb-4">
+          <Button variant="ghost" onClick={handleBack} className="mb-4">
             <ArrowLeft className="mr-2" /> Back
           </Button>
           <div>Loading...</div>
@@ -50,7 +61,7 @@ const TokenDetail = () => {
   return (
     <div className="min-h-screen bg-gray-50 p-8">
       <div className="max-w-6xl mx-auto">
-        <Button variant="ghost" onClick={() => navigate(-1)} className="mb-4">
+        <Button variant="ghost" onClick={handleBack} className="mb-4">
           <ArrowLeft className="mr-2" /> Back
         </Button>
 
