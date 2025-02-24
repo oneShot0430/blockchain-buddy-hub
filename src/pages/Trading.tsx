@@ -32,36 +32,36 @@ const Trading = () => {
     document.documentElement.classList.toggle('dark');
   };
 
-  useEffect(() => {
-    const fetchUsdcBalance = async () => {
-      if (window.ethereum) {
-        try {
-          const provider = new BrowserProvider(window.ethereum);
-          const signer = await provider.getSigner();
-          const usdcContract = new Contract(USDC, usdcAbi, provider);
-          const balance = await usdcContract.balanceOf(await signer.getAddress());
-          const decimals = await usdcContract.decimals();
-          const formattedBalance = (Number(balance) / Math.pow(10, decimals)).toFixed(2);
-          setUsdcBalance(formattedBalance);
-        } catch (error) {
-          console.error("Error fetching USDC balance:", error);
-          setUsdcBalance("0.00");
-        }
-      }
-    };
+  // useEffect(() => {
+  //   const fetchUsdcBalance = async () => {
+  //     if (window.ethereum) {
+  //       try {
+  //         const provider = new BrowserProvider(window.ethereum);
+  //         const signer = await provider.getSigner();
+  //         const usdcContract = new Contract(USDC, usdcAbi, provider);
+  //         const balance = await usdcContract.balanceOf(await signer.getAddress());
+  //         const decimals = await usdcContract.decimals();
+  //         const formattedBalance = (Number(balance) / Math.pow(10, decimals)).toFixed(2);
+  //         setUsdcBalance(formattedBalance);
+  //       } catch (error) {
+  //         console.error("Error fetching USDC balance:", error);
+  //         setUsdcBalance("0.00");
+  //       }
+  //     }
+  //   };
 
-    fetchUsdcBalance();
-    // Set up event listener for account changes
-    if (window.ethereum) {
-      window.ethereum.on('accountsChanged', fetchUsdcBalance);
-    }
+  //   fetchUsdcBalance();
+  //   // Set up event listener for account changes
+  //   if (window.ethereum) {
+  //     window.ethereum.on('accountsChanged', fetchUsdcBalance);
+  //   }
 
-    return () => {
-      if (window.ethereum) {
-        window.ethereum.removeListener('accountsChanged', fetchUsdcBalance);
-      }
-    };
-  }, []);
+  //   return () => {
+  //     if (window.ethereum) {
+  //       window.ethereum.removeListener('accountsChanged', fetchUsdcBalance);
+  //     }
+  //   };
+  // }, []);
 
   return (
     <ConnectionProvider endpoint={endpoint}>
