@@ -64,15 +64,6 @@ const TokenDetail = () => {
     );
   }
 
-  // Dummy data for the chart
-  // const chartData = [
-  //   { time: '1D', price: tokenData.price * 0.95 },
-  //   { time: '2D', price: tokenData.price * 0.98 },
-  //   { time: '3D', price: tokenData.price * 1.02 },
-  //   { time: '4D', price: tokenData.price * 1.01 },
-  //   { time: '5D', price: tokenData.price },
-  // ];
-
   return (
     <div className="min-h-screen bg-gray-50 p-8">
       <div className="max-w-6xl mx-auto">
