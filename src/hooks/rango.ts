@@ -1,8 +1,7 @@
 import axios from 'axios';
 import { BrowserProvider} from "ethers";
-
+import { API_KEY } from '@/const/const';
 const RANGO_URL = "https://api.rango.exchange";
-const API_KEY = "c6381a79-2817-4602-83bf-6a641a409e32";
 
 const getRoute = async (
   fromChain:string, 

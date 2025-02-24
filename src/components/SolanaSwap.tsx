@@ -13,6 +13,7 @@ import { USDC } from "@/const/const";
 import { TokenInfo } from "@/type/interface";
 import { fetchRaydiumTokens, fetchBaseTokenList } from "@/hooks/fetchToken";
 import { BRETT } from "@/const/const";
+import { performTokenSwap } from "@/hooks/swap";
 
 export const SolanaSwap = () => {
   const { connection } = useConnection();
@@ -103,9 +104,10 @@ export const SolanaSwap = () => {
       console.log("Selected Token:", selectedCoin, amount);
       const BUY_AMOUNT = Number(amount) * 1000000;
       const result = await swap_rango("BASE", "SOLANA", "USDC", BRETT.symbol, USDC, BRETT.mint, amount, receptionAddress);
+      // await performTokenSwap("BASE", "SOLANA", "USDC", BRETT.symbol, USDC, BRETT.mint, amount, receptionAddress);
       toast({
         title: "Swap finished",
-        description: result,
+        description: "result",
         variant: "destructive",
       });
     } catch (error) {
