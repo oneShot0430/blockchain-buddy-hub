@@ -3,7 +3,7 @@ import { BrowserProvider} from "ethers";
 import { RANGO_API_KEY } from '@/const/const';
 const RANGO_URL = "https://api.rango.exchange";
 
-const getRoute = async (
+export const getRoute = async (
   fromChain:string, 
   toChain:string, 
   fromSymbol: string, 
@@ -12,7 +12,7 @@ const getRoute = async (
   toToken: string,
   amount: string,
 ) => {
-  const url = `${RANGO_URL}/routing/best?apiKey=${RANGO_API_KEY}`;
+  const url = `${RANGO_URL}/routing/bests?apiKey=${RANGO_API_KEY}`;
 
   const options = {
     method: 'POST',

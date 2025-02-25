@@ -26,14 +26,16 @@ export const SolanaSwap = () => {
     name: "",
     mint: "",
     address: "",
-    logoURI: ""
+    logoURI: "",
+    coingeckoId: ""
   });
   const [selectedBaseCoin, setSelectedBaseCoin] = useState<TokenInfo>({
     symbol: "",
     name: "",
     mint: "",
     address: "",
-    logoURI: ""
+    logoURI: "",
+    coingeckoId:""
   });
   const [searchQuery, setSearchQuery] = useState("");
   const [searchQueryOnBase, setSearchQueryOnBase] = useState("");

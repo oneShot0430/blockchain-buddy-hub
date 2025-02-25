@@ -18,6 +18,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { Navbar } from "@/components/Navbar";
 import { getUSDCBalance } from "@/hooks/getUSDCBalance";
+import { getRoute } from "@/hooks/rango";
+import { USDC } from "@/const/const";
 
 const TokenDetail = () => {
   const { connection } = useConnection();
@@ -88,6 +90,11 @@ const TokenDetail = () => {
       navigate(-1);
     }
   };
+
+  const handleBuy = async () => {
+    const allRoutes = await getRoute("BASE", "BASE", "USDC", tokenData.symbol, USDC, tokenData.contract, amount);
+    console.log("allRoutes:", allRoutes);
+  }
 
   if (!tokenData) {
     return (
@@ -213,6 +220,7 @@ const TokenDetail = () => {
                 </div>
 
                 <Button
+                  onClick={handleBuy}
                   className="w-full bg-blue-600 hover:bg-blue-700"
                   disabled={!amount || parseFloat(amount) <= 0}
                 >
