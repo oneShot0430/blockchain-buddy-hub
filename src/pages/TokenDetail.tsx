@@ -97,18 +97,12 @@ const TokenDetail = () => {
 
   const handleShowRoutes = async () => {
     try {
-      const allRoutes = await getRoute(
-        "BASE",
-        "SOLANA",
-        "USDC",
-        tokenData?.symbol || "",
-        USDC,
-        tokenData?.contract || "",
-        amount
-      );
+      const allRoutes = await getRoute("BASE", "BASE", "USDC", tokenData.symbol, USDC, tokenData.contract, amount);
       console.log("Available routes:", allRoutes);
-      setRoutes(allRoutes.routes || []);
-      setShowBuyDialog(false);
+      setRoutes(allRoutes.results || []);
+      // setShowBuyDialog(false);
+
+      console.log(routes);
       setShowRoutesDialog(true);
     } catch (error) {
       console.error("Error fetching routes:", error);
@@ -250,7 +244,7 @@ const TokenDetail = () => {
                 </div>
 
                 <Button
-                  onClick={handleBuy}
+                  onClick={handleShowRoutes}
                   className="w-full bg-blue-600 hover:bg-blue-700"
                   disabled={!amount || parseFloat(amount) <= 0}
                 >

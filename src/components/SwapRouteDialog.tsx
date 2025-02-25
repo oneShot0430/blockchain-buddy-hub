@@ -25,6 +25,19 @@ export const SwapRouteDialog = ({
   toToken,
   onSelectRoute 
 }: SwapRouteDialogProps) => {
+  console.log("routes:", routes);
+  if (!routes) return (
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent className="sm:max-w-md">
+        <DialogHeader>
+          <div className="flex justify-between items-center">
+            <DialogTitle>No Available Routes</DialogTitle>
+          </div>
+        </DialogHeader>
+      </DialogContent>
+    </Dialog>
+  );
+
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-md">
@@ -48,8 +61,8 @@ export const SwapRouteDialog = ({
             >
               <div className="flex justify-between items-center mb-2">
                 <div className="flex items-center gap-2">
-                  <span className="text-sm text-gray-500">${route.fee || '0.00'}</span>
-                  <span className="text-sm text-gray-500">{route.estimatedTime || '00:45'}</span>
+                  <span className="text-sm text-gray-500">${parseFloat(route?.priceImpactUsd).toFixed(2) || '0.00'}</span>
+                  <span className="text-sm text-gray-500">{route?.swaps[0]?.estimatedTimeInSeconds || '00:45'}</span>
                   <span className="text-sm text-gray-500">Steps: {route.swaps?.length || 1}</span>
                 </div>
                 {index === 0 && (
@@ -58,28 +71,43 @@ export const SwapRouteDialog = ({
                   </span>
                 )}
               </div>
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
-                    <span className="text-xs">250</span>
+              {route.swaps?.map((swap, swap_index) => (
+                <div className="flex items-center justify-between" key={swap_index}>
+                  <div className="flex items-center gap-2">
+                    <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
+                      <span className="text-xs">{parseFloat(swap?.fromAmount).toFixed(2)}</span>
+                    </div>
+                    <img
+                      src={swap?.from?.logo}
+                      alt={swap?.from?.symbol}
+                      className="w-8 h-8 rounded-full"
+                    />
+                    <span>{swap?.from?.symbol}</span>
                   </div>
-                  <span>{fromToken}</span>
-                </div>
-                <ArrowRight className="h-4 w-4 text-gray-400" />
-                <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
-                    <img 
-                      src={route.targetLogo || '/placeholder.svg'} 
-                      alt={toToken}
-                      className="w-6 h-6"
+                  <ArrowRight className="h-4 w-16 text-gray-400" />
+                  <div>
+                    <img
+                      src={swap?.swapperLogo}
+                      alt={swap?.swapperId}
+                      className="w-8 h-8 rounded-full"
                     />
                   </div>
-                  <div className="text-right">
-                    <div>{route.outputAmount || '6,643.775536'} {toToken}</div>
-                    <div className="text-sm text-gray-500">≈${route.outputUSD || '251.5985'}</div>
+                  <ArrowRight className="h-4 w-16 text-gray-400" />
+                  <div className="flex items-center gap-2">
+                    <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
+                      <img 
+                        src={swap?.to?.logo || '/placeholder.svg'} 
+                        alt={swap?.to?.symbol}
+                        className="w-6 h-6"
+                      />
+                    </div>
+                    <div className="text-right">
+                      <div>{parseFloat(swap?.toAmount).toFixed(2) || '6,643.775536'} {swap?.to?.symbol}</div>
+                      <div className="text-sm text-gray-500">≈${(swap?.toAmount * swap?.to?.usdPrice).toFixed(2) || '251.5985'}</div>
+                    </div>
                   </div>
                 </div>
-              </div>
+              ) )}
             </div>
           ))}
         </div>
