@@ -1,5 +1,5 @@
 
-import { CMC_API_Key } from "@/const/const";
+import { CMC_API_KEY } from "@/const/const";
 import axios from "axios";
 import { CMCData, CMCResult } from "@/type/interface";
 
@@ -14,7 +14,7 @@ export const getTokenData = async (tokenSymbols: string[]) : Promise<CMCResult[]
   try {
     const response = await axios.get(url, {
       headers: {
-        "X-CMC_PRO_API_KEY": CMC_API_Key,
+        "X-CMC_PRO_API_KEY": CMC_API_KEY,
         Accept: "application/json",
       },
       params: {

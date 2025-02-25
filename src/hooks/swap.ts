@@ -2,7 +2,7 @@ import { RangoClient, } from "rango-sdk";
 import { TransactionRequest, ethers, BrowserProvider } from "ethers";
 import { setTimeout } from 'timers/promises'
 import { findToken } from "@/lib/meta";
-import { API_KEY } from "@/const/const";
+import { RANGO_API_KEY } from "@/const/const";
 
 // Hardcoded transaction types and statuses (replace these with actual values from the SDK if available)
 const TransactionType = {
@@ -30,7 +30,7 @@ export const performTokenSwap = async (
     console.log("Signer:", signer);
 
   // initiate sdk using your api key
-  const rango = new RangoClient(API_KEY)
+  const rango = new RangoClient(RANGO_API_KEY)
 
   // get blockchains and tokens meta data
   const meta = await rango.getAllMetadata()

@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { BrowserProvider} from "ethers";
-import { API_KEY } from '@/const/const';
+import { RANGO_API_KEY } from '@/const/const';
 const RANGO_URL = "https://api.rango.exchange";
 
 const getRoute = async (
@@ -12,7 +12,7 @@ const getRoute = async (
   toToken: string,
   amount: string,
 ) => {
-  const url = `${RANGO_URL}/routing/best?apiKey=${API_KEY}`;
+  const url = `${RANGO_URL}/routing/best?apiKey=${RANGO_API_KEY}`;
 
   const options = {
     method: 'POST',
@@ -46,7 +46,7 @@ const getRoute = async (
 }
 
 const createRangoTransaction = async (requestId: string, step: number, slippage: number) => {
-  const url = `${RANGO_URL}/tx/create?apiKey=${API_KEY}`;
+  const url = `${RANGO_URL}/tx/create?apiKey=${RANGO_API_KEY}`;
   const options = {
     method: 'POST',
     headers: {accept: '*/*', 'content-type': 'application/json'},
@@ -72,7 +72,7 @@ const createRangoTransaction = async (requestId: string, step: number, slippage:
 }
 
 const confirmRoute = async (requestId: string, fromChain: string, toChain: string, fromAddress: string, toAddress: string) => {
-  const url = `${RANGO_URL}/routing/confirm?apiKey=${API_KEY}`;
+  const url = `${RANGO_URL}/routing/confirm?apiKey=${RANGO_API_KEY}`;
   const options = {
     method: 'POST',
     headers: {accept: '*/*', 'content-type': 'application/json'},
@@ -99,7 +99,7 @@ const confirmRoute = async (requestId: string, fromChain: string, toChain: strin
 }
 
 const checkStatus = async ( requestId: string, txId: string, step: number) => {
-  const url = `${RANGO_URL}/tx/check-status?apiKey=${API_KEY}`;
+  const url = `${RANGO_URL}/tx/check-status?apiKey=${RANGO_API_KEY}`;
   const options = {
     method: 'POST',
     headers: {accept: '*/*', 'content-type': 'application/json'},
@@ -124,7 +124,7 @@ const checkStatus = async ( requestId: string, txId: string, step: number) => {
 }
 
 const checkApprovalTx = async (requestId: string, txHash: string) => {
-  const url = `${RANGO_URL}/tx/${requestId}/check-approval?txId=${txHash}&apiKey=${API_KEY}`;
+  const url = `${RANGO_URL}/tx/${requestId}/check-approval?txId=${txHash}&apiKey=${RANGO_API_KEY}`;
   const options = {method: 'GET', headers: {accept: '*/*'}};
 
   try {

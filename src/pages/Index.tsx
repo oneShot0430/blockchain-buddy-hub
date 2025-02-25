@@ -25,22 +25,16 @@ const Index = () => {
   };
 
   return (
-    <ConnectionProvider endpoint={endpoint}>
-      <WalletProvider wallets={wallets} autoConnect>
-        <WalletModalProvider>
-          <div className={`min-h-screen ${isDarkMode ? 'dark' : ''}`}>
-            <div className="dark:bg-background">
-              <Navbar
-                isDarkMode={isDarkMode}
-                toggleTheme={toggleTheme}
-                currentPath={location.pathname}
-              />
-              <Dashboard />
-            </div>
-          </div>
-        </WalletModalProvider>
-      </WalletProvider>
-    </ConnectionProvider>
+    <div className={`min-h-screen ${isDarkMode ? 'dark' : ''}`}>
+      <div className="dark:bg-background">
+        <Navbar
+          isDarkMode={isDarkMode}
+          toggleTheme={toggleTheme}
+          currentPath={location.pathname}
+        />
+        <Dashboard />
+      </div>
+    </div>
   );
 };
 

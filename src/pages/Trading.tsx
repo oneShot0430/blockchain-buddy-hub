@@ -64,33 +64,27 @@ const Trading = () => {
   // }, []);
 
   return (
-    <ConnectionProvider endpoint={endpoint}>
-      <WalletProvider wallets={wallets} autoConnect>
-        <WalletModalProvider>
-          <div className={`min-h-screen ${isDarkMode ? 'dark' : ''}`}>
-            <div className="dark:bg-background">
-              <Navbar
-                isDarkMode={isDarkMode}
-                toggleTheme={toggleTheme}
-                currentPath={location.pathname}
-              />
-              <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-                <div className="w-full max-w-md mx-auto">
-                  {usdcBalance && window.ethereum && (
-                    <div className="mb-4 p-4 bg-blue-50 rounded-lg">
-                      <p className="text-blue-600 font-medium">
-                        Base Chain USDC Balance: {usdcBalance} USDC
-                      </p>
-                    </div>
-                  )}
-                  <SolanaSwap />
-                </div>
+    <div className={`min-h-screen ${isDarkMode ? 'dark' : ''}`}>
+      <div className="dark:bg-background">
+        <Navbar
+          isDarkMode={isDarkMode}
+          toggleTheme={toggleTheme}
+          currentPath={location.pathname}
+        />
+        <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="w-full max-w-md mx-auto">
+            {usdcBalance && window.ethereum && (
+              <div className="mb-4 p-4 bg-blue-50 rounded-lg">
+                <p className="text-blue-600 font-medium">
+                  Base Chain USDC Balance: {usdcBalance} USDC
+                </p>
               </div>
-            </div>
+            )}
+            <SolanaSwap />
           </div>
-        </WalletModalProvider>
-      </WalletProvider>
-    </ConnectionProvider>
+        </div>
+      </div>
+    </div>
   );
 };
 

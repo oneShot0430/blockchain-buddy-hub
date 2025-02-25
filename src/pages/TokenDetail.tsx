@@ -1,5 +1,6 @@
-
 import { useState, useEffect } from "react";
+import { BrowserProvider} from "ethers";
+import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -16,8 +17,12 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Navbar } from "@/components/Navbar";
+import { getUSDCBalance } from "@/hooks/getUSDCBalance";
 
 const TokenDetail = () => {
+  const { connection } = useConnection();
+  const { publicKey, sendTransaction } = useWallet();
+  
   const { symbol } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
@@ -29,12 +34,29 @@ const TokenDetail = () => {
   const [amount, setAmount] = useState("");
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [logoUri, setLogoUri] = useState("");
-
+  const [pubAddress, setPubAddress] = useState("");
+  const [usdcBalance, setUsdcBalance] = useState("");
   const toggleTheme = () => {
     setIsDarkMode(!isDarkMode);
     document.documentElement.classList.toggle('dark');
   };
 
+  useEffect(() => {
+    const getBalance = async () => {
+      if (!window.ethereum) return;
+      const provider = new BrowserProvider(window.ethereum);
+      const signer = await provider.getSigner();
+      console.log("Signer:", signer.address);
+      setPubAddress(signer.address);
+
+      const baseUSDCBalance = await getUSDCBalance(signer.address);
+      console.log("baseUSDCBalance:", baseUSDCBalance);
+      setUsdcBalance(baseUSDCBalance);
+    }
+
+    getBalance();
+  }, []);
+  
   useEffect(() => {
     const fetchToken = async () => {
       if (symbol) {
@@ -147,12 +169,12 @@ const TokenDetail = () => {
                     <span className="text-sm text-gray-500">Active Wallet</span>
                     <div className="flex items-center space-x-2">
                       <div className="w-6 h-6 bg-blue-100 rounded-full"></div>
-                      <span className="text-sm">Pending</span>
+                      {!pubAddress ? <span className="text-sm">Pending</span> :<span className="text-sm">{pubAddress.slice(0, 4)}...{pubAddress.slice(-3)}</span>}
                     </div>
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-gray-500">Live Balance</span>
-                    <span className="text-sm">0.0000 USDC</span>
+                    {! usdcBalance ? <span className="text-sm">0.0000 USDC</span> : <span className="text-sm">{parseFloat(usdcBalance).toFixed(3)} USDC</span>}
                   </div>
                 </div>
 
