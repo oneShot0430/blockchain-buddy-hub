@@ -18,7 +18,8 @@ export const fetchRaydiumTokens = async (): Promise<TokenInfo[]> => {
         name: token.name,
         mint: token.address,
         address: token.address,
-        logoURI: token.logoURI
+        logoURI: token.logoURI,
+        coingeckoId: token.extensions.coingeckoId
       }));
   } catch (error) {
     console.error('Error fetching Raydium tokens:', error);

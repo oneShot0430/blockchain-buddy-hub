@@ -1,5 +1,6 @@
 
 export interface RaydiumToken {
+  extensions: extensions;
   symbol: string;
   name: string;
   mint: string;
@@ -7,7 +8,9 @@ export interface RaydiumToken {
   address: string;
   logoURI: string;
 }
-
+export interface extensions {
+  coingeckoId: string;
+}
 export interface RaydiumResponse {
   tokens: {
     [key: string]: RaydiumToken;
@@ -20,6 +23,7 @@ export interface TokenInfo {
   mint: string;
   address: string;
   logoURI: string;
+  coingeckoId: string;
 }
 
 export interface CMCplatform {
@@ -52,7 +56,7 @@ export interface CMCData {
 }
 
 export interface CMCResult {
-  id: number;
+  id: number | string;
   name: string;
   symbol: string;
   contract: string;

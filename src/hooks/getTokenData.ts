@@ -87,3 +87,94 @@ export const fetchHistoricalData = async (tokenName: string): Promise<{formatted
     return { formattedData: [], logo_uri: '' };
   }
 };
+
+// import axios from "axios";
+// import { CMCData, CMCResult } from "@/type/interface";
+
+// export const getTokenData = async (tokenSymbols: string[]): Promise<CMCResult[]> => {
+//   if (!tokenSymbols || tokenSymbols.length === 0) {
+//     return [];
+//   }
+
+//   console.log(tokenSymbols.join(","));
+//   const url = "https://api.coingecko.com/api/v3/simple/price";
+
+//   try {
+//     const response = await axios.get(url, {
+//       params: {
+//         ids: tokenSymbols.join(","),
+//         vs_currencies: "usd",
+//         include_market_cap: "true",
+//         include_24hr_vol: "true",
+//         include_24hr_change: "true",
+//         include_last_updated_at: "true",
+//       },
+//       validateStatus: (status) => status < 500, // Only reject if status code is greater than or equal to 500
+//     });
+
+//     // Check if response exists and has data
+//     if (!response?.data || Object.keys(response.data).length === 0) {
+//       console.log("No data found, returning default data");
+//       return [];
+//     }
+
+//     const data = response.data;
+//     console.log("Data received:", data);
+
+//     // Extract relevant details
+//     const results = Object.keys(data).map((tokenId: string): CMCResult => {
+//       const tokenData = data[tokenId];
+//       return {
+//         id: tokenId, // CoinGecko doesn't provide an ID in this endpoint, so we use the tokenId
+//         name: tokenId, // CoinGecko doesn't provide a name in this endpoint, so we use the tokenId
+//         symbol: tokenId, // CoinGecko doesn't provide a symbol in this endpoint, so we use the tokenId
+//         contract: "N/A", // CoinGecko doesn't provide contract address in this endpoint
+//         price: tokenData.usd || 0,
+//         change_24h: tokenData.usd_24h_change || 0,
+//         change_7d: 0, // CoinGecko doesn't provide 7d change in this endpoint
+//         volume_24h: tokenData.usd_24h_vol || 0,
+//         market_cap: tokenData.usd_market_cap || 0,
+//         social_score: 0, // CoinGecko doesn't provide social score in this endpoint
+//       };
+//     });
+
+//     return results.sort((a, b) => b["market_cap"] - a["market_cap"]);
+//   } catch (error) {
+//     console.error("Error fetching token data:", error.message);
+//     return [];
+//   }
+// };
+
+// export const fetchHistoricalData = async (tokenName: string): Promise<{ formattedData: { time: string; price: number }[]; logo_uri: string }> => {
+//   try {
+//     // Fetch historical data from CoinGecko API
+//     console.log("tokenId:", tokenName);
+//     const coins = await axios.get(`https://api.coingecko.com/api/v3/search?query=${tokenName}`);
+//     console.log(coins.data.coins[0]);
+//     const tokenId = coins.data.coins[0].id;
+//     const logo_uri = coins.data.coins[0].thumb;
+//     const response = await axios.get(
+//       `https://api.coingecko.com/api/v3/coins/${tokenId}/market_chart`,
+//       {
+//         params: {
+//           vs_currency: 'usd',
+//           days: '7', // Fetch data for the last 7 days
+//         },
+//       }
+//     );
+//     console.log("coinGeckoResponse;", response);
+//     // Extract prices from the response
+//     const prices = response.data.prices;
+
+//     // Format the data for the chart
+//     const formattedData = prices.map((price: [number, number]) => ({
+//       time: new Date(price[0]).toLocaleDateString(), // Convert timestamp to a readable date
+//       price: price[1], // Extract the price
+//     }));
+
+//     return { formattedData, logo_uri };
+//   } catch (error) {
+//     console.error("Error fetching historical data:", error instanceof Error ? error.message : error);
+//     return { formattedData: [], logo_uri: '' };
+//   }
+// };
