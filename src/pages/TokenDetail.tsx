@@ -20,6 +20,7 @@ import { Navbar } from "@/components/Navbar";
 import { getUSDCBalance } from "@/hooks/getUSDCBalance";
 import { getRoute } from "@/hooks/rango";
 import { USDC } from "@/const/const";
+import { SwapRouteDialog } from "@/components/SwapRouteDialog";
 
 const TokenDetail = () => {
   const { connection } = useConnection();
@@ -38,6 +39,9 @@ const TokenDetail = () => {
   const [logoUri, setLogoUri] = useState("");
   const [pubAddress, setPubAddress] = useState("");
   const [usdcBalance, setUsdcBalance] = useState("");
+  const [showRoutesDialog, setShowRoutesDialog] = useState(false);
+  const [routes, setRoutes] = useState<any[]>([]);
+
   const toggleTheme = () => {
     setIsDarkMode(!isDarkMode);
     document.documentElement.classList.toggle('dark');
@@ -89,6 +93,32 @@ const TokenDetail = () => {
     } else {
       navigate(-1);
     }
+  };
+
+  const handleShowRoutes = async () => {
+    try {
+      const allRoutes = await getRoute(
+        "BASE",
+        "SOLANA",
+        "USDC",
+        tokenData?.symbol || "",
+        USDC,
+        tokenData?.contract || "",
+        amount
+      );
+      console.log("Available routes:", allRoutes);
+      setRoutes(allRoutes.routes || []);
+      setShowBuyDialog(false);
+      setShowRoutesDialog(true);
+    } catch (error) {
+      console.error("Error fetching routes:", error);
+    }
+  };
+
+  const handleSelectRoute = (route: any) => {
+    console.log("Selected route:", route);
+    setShowRoutesDialog(false);
+    // Here you would implement the actual swap using the selected route
   };
 
   const handleBuy = async () => {
@@ -229,6 +259,15 @@ const TokenDetail = () => {
               </div>
             </DialogContent>
           </Dialog>
+
+          <SwapRouteDialog
+            isOpen={showRoutesDialog}
+            onClose={() => setShowRoutesDialog(false)}
+            routes={routes}
+            fromToken="USDC"
+            toToken={tokenData?.symbol || ""}
+            onSelectRoute={handleSelectRoute}
+          />
 
           <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
             <div className="flex items-center gap-4 mb-6">
