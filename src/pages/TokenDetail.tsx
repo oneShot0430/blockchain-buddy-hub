@@ -1,10 +1,11 @@
+
 import { useState, useEffect } from "react";
 import { BrowserProvider} from "ethers";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ArrowLeft, Route } from "lucide-react";
+import { ArrowLeft, Route, ArrowRight } from "lucide-react";
 import { getTokenData, fetchHistoricalData } from "@/hooks/getTokenData";
 import { CMCResult } from "@/type/interface";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
