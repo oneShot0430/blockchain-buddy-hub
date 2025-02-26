@@ -4,7 +4,7 @@ import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Route } from "lucide-react";
 import { getTokenData, fetchHistoricalData } from "@/hooks/getTokenData";
 import { CMCResult } from "@/type/interface";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
@@ -41,6 +41,7 @@ const TokenDetail = () => {
   const [usdcBalance, setUsdcBalance] = useState("");
   const [showRoutesDialog, setShowRoutesDialog] = useState(false);
   const [routes, setRoutes] = useState<any[]>([]);
+  const [selectedRoute, setSelectedRoute] = useState<any>(null);
 
   const toggleTheme = () => {
     setIsDarkMode(!isDarkMode);
@@ -111,8 +112,9 @@ const TokenDetail = () => {
 
   const handleSelectRoute = (route: any) => {
     console.log("Selected route:", route);
+    setSelectedRoute(route);
     setShowRoutesDialog(false);
-    // Here you would implement the actual swap using the selected route
+    setShowBuyDialog(true);
   };
 
   const handleBuy = async () => {
@@ -172,6 +174,49 @@ const TokenDetail = () => {
                     <p className="text-sm text-gray-500">{tokenData.symbol}</p>
                   </div>
                 </div>
+
+                {selectedRoute && (
+                  <div className="border rounded-lg p-4 bg-blue-50">
+                    <div className="flex items-center justify-between mb-2">
+                      <div className="flex items-center gap-2">
+                        <Route className="h-4 w-4 text-blue-600" />
+                        <span className="text-sm font-medium">Selected Route</span>
+                      </div>
+                      <Button 
+                        variant="ghost" 
+                        size="sm" 
+                        onClick={() => {
+                          setShowBuyDialog(false);
+                          setShowRoutesDialog(true);
+                        }}
+                      >
+                        Change
+                      </Button>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center">
+                          <span className="text-xs">{amount}</span>
+                        </div>
+                        <span>USDC</span>
+                      </div>
+                      <ArrowRight className="h-4 w-4 text-gray-400" />
+                      <div className="flex items-center gap-2">
+                        <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center">
+                          <img 
+                            src={logoUri} 
+                            alt={tokenData.symbol}
+                            className="w-6 h-6"
+                          />
+                        </div>
+                        <div className="text-right">
+                          <div>{selectedRoute.outputAmount || amount} {tokenData.symbol}</div>
+                          <div className="text-sm text-gray-500">≈${selectedRoute.outputUSD || '0.00'}</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
 
                 <div className="space-y-2">
                   <label className="text-sm font-medium">Amount</label>
@@ -244,11 +289,11 @@ const TokenDetail = () => {
                 </div>
 
                 <Button
-                  onClick={handleShowRoutes}
+                  onClick={selectedRoute ? () => console.log("Execute swap with route:", selectedRoute) : handleShowRoutes}
                   className="w-full bg-blue-600 hover:bg-blue-700"
                   disabled={!amount || parseFloat(amount) <= 0}
                 >
-                  Buy {tokenData.symbol}
+                  {selectedRoute ? `Buy ${tokenData.symbol}` : 'See Available Routes'}
                 </Button>
               </div>
             </DialogContent>
