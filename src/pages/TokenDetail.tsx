@@ -19,14 +19,16 @@ import {
 import { Input } from "@/components/ui/input";
 import { Navbar } from "@/components/Navbar";
 import { getUSDCBalance } from "@/hooks/getUSDCBalance";
-import { getRoute } from "@/hooks/rango";
+import { getRoute, confirmRoute, createRangoTransaction, checkApprovalTx, checkStatus } from "@/hooks/rango";
 import { USDC } from "@/const/const";
 import { SwapRouteDialog } from "@/components/SwapRouteDialog";
+import { useToast } from "@/components/ui/use-toast";
+import { Transaction } from "@solana/web3.js";
 
 const TokenDetail = () => {
   const { connection } = useConnection();
   const { publicKey, sendTransaction } = useWallet();
-  
+  const { toast } = useToast();
   const { symbol } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
@@ -39,6 +41,7 @@ const TokenDetail = () => {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [logoUri, setLogoUri] = useState("");
   const [pubAddress, setPubAddress] = useState("");
+  const [signer, setSigner] = useState(null);
   const [usdcBalance, setUsdcBalance] = useState("");
   const [showRoutesDialog, setShowRoutesDialog] = useState(false);
   const [routes, setRoutes] = useState<any[]>([]);
@@ -56,7 +59,7 @@ const TokenDetail = () => {
       const signer = await provider.getSigner();
       console.log("Signer:", signer.address);
       setPubAddress(signer.address);
-
+      setSigner(signer);
       const baseUSDCBalance = await getUSDCBalance(signer.address);
       console.log("baseUSDCBalance:", baseUSDCBalance);
       setUsdcBalance(baseUSDCBalance);
@@ -119,8 +122,90 @@ const TokenDetail = () => {
   };
 
   const handleBuy = async () => {
-    const allRoutes = await getRoute("BASE", "BASE", "USDC", tokenData.symbol, USDC, tokenData.contract, amount);
-    console.log("allRoutes:", allRoutes);
+    try {
+      
+      console.log("Buy tokens");
+      const confirmResponse = await confirmRoute(selectedRoute.requestId, "BASE", "BASE", pubAddress, pubAddress);
+      const confirmedRoute = confirmResponse.result;
+      console.log("confirmed Route:", confirmedRoute);    
+      if (!confirmedRoute) {
+        throw new Error(`Error in confirming route, ${confirmResponse.error}`)
+      }
+      const transactionResponse = await createRangoTransaction(confirmedRoute.requestId, 1, 1);
+      console.log("transaction:", transactionResponse);
+      if (!transactionResponse.transaction) {
+        throw new Error(`Error in swapping, ${transactionResponse.error}`)
+      }
+      const tx = transactionResponse.transaction;
+      if (tx.isApprovalTx) {
+        // sign the approve transaction
+        const approveTransaction = {
+          from: tx.from,
+          to: tx.to,
+          data: tx.data,
+          value: tx.value,
+          maxFeePerGas: tx.maxFeePerGas,
+          maxPriorityFeePerGas: tx.maxPriorityFeePerGas,
+          gasPrice: tx.gasPrice,
+          gasLimit: tx.gasLimit,
+          chainId: 8453,
+        }
+        const { hash } = await signer.sendTransaction(approveTransaction);
+        console.log("txHash:", hash);
+        toast({
+          title: "Approve Transaction",
+          description: "Please approve in your Wallet"
+        });
+        // wait for approval
+        while (true) {
+          // await setTimeout(5000)
+          await setTimeout(() => {}, 5000);
+          const { isApproved, currentApprovedAmount, requiredApprovedAmount, txStatus } = await checkApprovalTx(confirmedRoute.requestId, hash)
+          if (isApproved)
+            break
+          else if (txStatus === "failed")
+            throw new Error('Approve transaction failed in blockchain')
+          else if (txStatus === "success")
+            throw new Error(`Insufficient approve, current amount: ${currentApprovedAmount}, required amount: ${requiredApprovedAmount}`)
+        }
+      }
+  
+      const mainTransaction = {
+        from: tx.from,
+        to: tx.to,
+        data: tx.data,
+        value: tx.value,
+        maxFeePerGas: tx.maxFeePerGas,
+        maxPriorityFeePerGas: tx.maxPriorityFeePerGas,
+        gasPrice: tx.gasPrice,
+        gasLimit: tx.gasLimit,
+        chainId: 8453,
+      };
+      let status = "pending";
+      toast({
+        title: "Swap Initiated",
+        description: `Swapping ${amount} USDC on Base to ${tokenData.symbol}, It is already initalized and ${status}`,
+      });
+      while (true) {
+        await setTimeout(() => {}, 10000);
+        const { hash } = await signer.sendTransaction(mainTransaction);
+        console.log("txHash:", hash);
+        const state = await checkStatus(confirmedRoute.result.requestId, hash, 1);
+        console.log("txState:", state);
+        if (state.status === "success") {status = state.status; break;}
+        else if (state.status === "failed") {status = state.status; throw new Error(`Swap failed`)}
+      }
+      toast({
+        title: "Swap Finished",
+        description: `Swapping ${amount} USDC on Base to ${tokenData.symbol} is ${status}`,
+      });
+    } catch (error) {
+      console.log("error:", error);
+      toast({
+        title: "Error occured in Swapping",
+        description: error,
+      })
+    }
   }
 
   if (!tokenData) {
@@ -194,7 +279,7 @@ const TokenDetail = () => {
                         Change
                       </Button>
                     </div>
-                    <div className="flex items-center justify-between">
+                    {/* <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center">
                           <span className="text-xs">{amount}</span>
@@ -215,7 +300,44 @@ const TokenDetail = () => {
                           <div className="text-sm text-gray-500">≈${selectedRoute.outputUSD || '0.00'}</div>
                         </div>
                       </div>
-                    </div>
+                    </div> */}
+                    {selectedRoute.swaps?.map((swap, swap_index) => (
+                      <div className="flex items-center justify-between" key={swap_index}>
+                        <div className="flex items-center gap-2">
+                          <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
+                            <span className="text-xs">{parseFloat(swap?.fromAmount).toFixed(2)}</span>
+                          </div>
+                          <img
+                            src={swap?.from?.logo}
+                            alt={swap?.from?.symbol}
+                            className="w-8 h-8 rounded-full"
+                          />
+                          <span>{swap?.from?.symbol}</span>
+                        </div>
+                        <ArrowRight className="h-4 w-16 text-gray-400" />
+                        <div>
+                          <img
+                            src={swap?.swapperLogo}
+                            alt={swap?.swapperId}
+                            className="w-8 h-8 rounded-full"
+                          />
+                        </div>
+                        <ArrowRight className="h-4 w-16 text-gray-400" />
+                        <div className="flex items-center gap-2">
+                          <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
+                            <img 
+                              src={swap?.to?.logo || '/placeholder.svg'} 
+                              alt={swap?.to?.symbol}
+                              className="w-6 h-6"
+                            />
+                          </div>
+                          <div className="text-right">
+                            <div>{parseFloat(swap?.toAmount).toFixed(2) || '6,643.775536'} {swap?.to?.symbol}</div>
+                            <div className="text-sm text-gray-500">≈${(swap?.toAmount * swap?.to?.usdPrice).toFixed(2) || '251.5985'}</div>
+                          </div>
+                        </div>
+                      </div>
+                    ) )}
                   </div>
                 )}
 
@@ -290,7 +412,7 @@ const TokenDetail = () => {
                 </div>
 
                 <Button
-                  onClick={selectedRoute ? () => console.log("Execute swap with route:", selectedRoute) : handleShowRoutes}
+                  onClick={selectedRoute ? handleBuy : handleShowRoutes}
                   className="w-full bg-blue-600 hover:bg-blue-700"
                   disabled={!amount || parseFloat(amount) <= 0}
                 >

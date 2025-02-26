@@ -45,7 +45,7 @@ export const getRoute = async (
   }
 }
 
-const createRangoTransaction = async (requestId: string, step: number, slippage: number) => {
+export const createRangoTransaction = async (requestId: string, step: number, slippage: number) => {
   const url = `${RANGO_URL}/tx/create?apiKey=${RANGO_API_KEY}`;
   const options = {
     method: 'POST',
@@ -71,7 +71,7 @@ const createRangoTransaction = async (requestId: string, step: number, slippage:
   }
 }
 
-const confirmRoute = async (requestId: string, fromChain: string, toChain: string, fromAddress: string, toAddress: string) => {
+export const confirmRoute = async (requestId: string, fromChain: string, toChain: string, fromAddress: string, toAddress: string) => {
   const url = `${RANGO_URL}/routing/confirm?apiKey=${RANGO_API_KEY}`;
   const options = {
     method: 'POST',
@@ -98,7 +98,7 @@ const confirmRoute = async (requestId: string, fromChain: string, toChain: strin
   }
 }
 
-const checkStatus = async ( requestId: string, txId: string, step: number) => {
+export const checkStatus = async ( requestId: string, txId: string, step: number) => {
   const url = `${RANGO_URL}/tx/check-status?apiKey=${RANGO_API_KEY}`;
   const options = {
     method: 'POST',
@@ -123,7 +123,7 @@ const checkStatus = async ( requestId: string, txId: string, step: number) => {
   }
 }
 
-const checkApprovalTx = async (requestId: string, txHash: string) => {
+export const checkApprovalTx = async (requestId: string, txHash: string) => {
   const url = `${RANGO_URL}/tx/${requestId}/check-approval?txId=${txHash}&apiKey=${RANGO_API_KEY}`;
   const options = {method: 'GET', headers: {accept: '*/*'}};
 
@@ -139,6 +139,67 @@ const checkApprovalTx = async (requestId: string, txHash: string) => {
     throw error; // Re-throw the error for the caller to handle
   }
 }
+
+// export const excute_swap = async (tx) => {
+//   try {
+//     if (tx.isApprovalTx) {
+//       // sign the approve transaction
+//       const approveTransaction = {
+//         from: tx.from,
+//         to: tx.to,
+//         data: tx.data,
+//         value: tx.value,
+//         maxFeePerGas: tx.maxFeePerGas,
+//         maxPriorityFeePerGas: tx.maxPriorityFeePerGas,
+//         gasPrice: tx.gasPrice,
+//         gasLimit: tx.gasLimit,
+//         chainId: 8453,
+//       }
+//       const { hash } = await signer.sendTransaction(approveTransaction);
+//       console.log("txHash:", hash);
+
+//       // wait for approval
+//       while (true) {
+//         // await setTimeout(5000)
+//         await setTimeout(() => {}, 5000);
+//         const { isApproved, currentApprovedAmount, requiredApprovedAmount, txStatus } = await checkApprovalTx(confirmedRoute.requestId, hash)
+//         if (isApproved)
+//           break
+//         else if (txStatus === "failed")
+//           throw new Error('Approve transaction failed in blockchain')
+//         else if (txStatus === "success")
+//           throw new Error(`Insufficient approve, current amount: ${currentApprovedAmount}, required amount: ${requiredApprovedAmount}`)
+//       }
+//     }
+
+
+//     const mainTransaction = {
+//       from: tx.from,
+//       to: tx.to,
+//       data: tx.data,
+//       value: tx.value,
+//       maxFeePerGas: tx.maxFeePerGas,
+//       maxPriorityFeePerGas: tx.maxPriorityFeePerGas,
+//       gasPrice: tx.gasPrice,
+//       gasLimit: tx.gasLimit,
+//       chainId: 8453,
+//     };
+//     let status: any;
+//     while (true) {
+//       await setTimeout(() => {}, 10000);
+//       const { hash } = await signer.sendTransaction(mainTransaction);
+//       console.log("txHash:", hash);
+//       const state = await checkStatus(confirmedRoute.result.requestId, hash, 1);
+//       console.log("txState:", state);
+//       if (state.status === "success") {status = state.status; break;}
+//       else if (state.status === "failed") {status = state.status; throw new Error(`Swap failed`)}
+//     }
+
+//     return `Swap ${status}`;
+//   } catch (error) {
+//     console.log("error occured: ", error);
+//   }
+// }
 
 export const swap_rango = async (
   fromChain: string, 
