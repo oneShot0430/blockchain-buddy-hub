@@ -40,3 +40,5 @@ export const Jupiterurl = "https://tokens.jup.ag/tokens?tags=verified";
 
 
 export const BASE_TOKEN_LIST_URL = "https://raw.githubusercontent.com/Uniswap/default-token-list/main/src/tokens/base.json";
+
+export const BACKEND_HEROKU_URL = "https://zex-backend-7427db10a09b.herokuapp.com/";

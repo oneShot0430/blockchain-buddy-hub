@@ -1,4 +1,4 @@
-import { USDC, BRETT, Jupiterurl, BASE_TOKEN_LIST_URL } from "@/const/const";
+import { USDC, BRETT, Jupiterurl, BASE_TOKEN_LIST_URL, BACKEND_HEROKU_URL } from "@/const/const";
 import { RaydiumResponse, RaydiumToken, TokenInfo } from "@/type/interface";
 
 export const fetchRaydiumTokens = async (): Promise<TokenInfo[]> => {
@@ -57,7 +57,7 @@ export const fetchMemeOnBaseTokenList = async () => {
 
   try {
     // Replace the URL to call the backend endpoint instead of BASE_TOKEN_LIST_URL
-    const response = await fetch("http://localhost:5000/api/basememe"); // Assuming your backend is running on localhost:5000
+    const response = await fetch(`${BACKEND_HEROKU_URL}api/basememe`); // Assuming your backend is running on localhost:5000
     console.log("reponse: ", response);
     if (!response.ok) {
       throw new Error(`Failed to fetch token list: ${response.statusText}`);

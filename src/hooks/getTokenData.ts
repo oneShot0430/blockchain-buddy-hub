@@ -1,6 +1,7 @@
 
 // import { CMC_API_KEY } from "@/const/const";
 import axios from "axios";
+import { BACKEND_HEROKU_URL } from "@/const/const";
 // import { CMCData, CMCResult } from "@/type/interface";
 
 // export const getTokenData = async (tokenSymbols: string[]) : Promise<CMCResult[]> => {
@@ -90,7 +91,7 @@ import axios from "axios";
 
 export const getTokenData = async (tokenSymbols) => {
   try {
-    const response = await axios.get("http://localhost:5000/api/tokens", {
+    const response = await axios.get(`${BACKEND_HEROKU_URL}api/tokens`, {
       params: { symbols: tokenSymbols.join(",") },
     });
     console.log("response:", response.data);
@@ -103,7 +104,7 @@ export const getTokenData = async (tokenSymbols) => {
 
 export const fetchHistoricalData = async (tokenName) => {
   try {
-    const response = await axios.get("http://localhost:5000/api/historical", {
+    const response = await axios.get(`${BACKEND_HEROKU_URL}api/historical`, {
       params: { tokenName },
     });
     return response.data;
