@@ -33,7 +33,7 @@ const App = () => {
               <BrowserRouter>
                 <Routes>
                   <Route path="/" element={<Index />} />
-                  <Route path="/trading" element={<Trading />} />
+                  {/* <Route path="/trading" element={<Trading />} /> */}
                   <Route path="/roadmap" element={<Roadmap />} />
                   <Route path="/token/:symbol" element={<TokenDetail />} />
                 </Routes>

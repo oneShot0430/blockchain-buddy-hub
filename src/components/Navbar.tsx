@@ -30,7 +30,7 @@ export const Navbar = ({ isDarkMode, toggleTheme, currentPath }: NavbarProps) =>
               >
                 Dashboard
               </Link>
-              <Link
+              {/* <Link
                 to="/trading"
                 className={`px-3 py-2 ${
                   currentPath === "/trading"
@@ -39,7 +39,7 @@ export const Navbar = ({ isDarkMode, toggleTheme, currentPath }: NavbarProps) =>
                 }`}
               >
                 Trading
-              </Link>
+              </Link> */}
               <Link
                 to="/roadmap"
                 className={`px-3 py-2 ${
