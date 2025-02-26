@@ -61,7 +61,7 @@ const TokenDetail = () => {
     }
 
     getBalance();
-  }, []);
+  }, [window.ethereum]);
   
   useEffect(() => {
     const fetchToken = async () => {

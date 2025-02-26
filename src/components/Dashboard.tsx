@@ -4,7 +4,7 @@ import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
 import { useQuery } from "@tanstack/react-query";
-import { fetchRaydiumTokens } from "@/hooks/fetchToken";
+import { fetchRaydiumTokens, fetchMemeOnBaseTokenList } from "@/hooks/fetchToken";
 import { useEffect, useState } from "react";
 import { getTokenData } from "@/hooks/getTokenData";
 import { CMCResult } from "@/type/interface";
@@ -23,7 +23,7 @@ export const Dashboard = () => {
   const navigate = useNavigate();
   const { data: memeCoins, isLoading, error } = useQuery({
     queryKey: ['raydiumTokens'],
-    queryFn: fetchRaydiumTokens,
+    queryFn: fetchMemeOnBaseTokenList,
   });
 
   const [coinData, setCoinData] = useState<CMCResult[]>(defaultData);
