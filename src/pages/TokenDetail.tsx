@@ -190,7 +190,7 @@ const TokenDetail = () => {
         await setTimeout(() => {}, 10000);
         const { hash } = await signer.sendTransaction(mainTransaction);
         console.log("txHash:", hash);
-        const state = await checkStatus(confirmedRoute.result.requestId, hash, 1);
+        const state = await checkStatus(confirmedRoute.requestId, hash, 1);
         console.log("txState:", state);
         if (state.status === "success") {status = state.status; break;}
         else if (state.status === "failed") {status = state.status; throw new Error(`Swap failed`)}
