@@ -47,7 +47,8 @@ export const Dashboard = () => {
       setTotalPages(Math.ceil(filteredCoins.length / itemsPerPage));
       const startIndex = (currentPage - 1) * itemsPerPage;
       const endIndex = startIndex + itemsPerPage;
-      const tokensymbols = filteredCoins.map(token => token.symbol);
+      const extraSymbols = ["TOSHI", "DEGEN", "TYBG", "$mfer"];
+      const tokensymbols = [filteredCoins.map(token => token.symbol), ...extraSymbols];
       const cmcResult = await getTokenData(tokensymbols.slice(startIndex, endIndex));
       
       if (cmcResult && cmcResult.length > 0) {
