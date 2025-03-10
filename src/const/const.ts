@@ -41,4 +41,11 @@ export const Jupiterurl = "https://tokens.jup.ag/tokens?tags=verified";
 
 export const BASE_TOKEN_LIST_URL = "https://raw.githubusercontent.com/Uniswap/default-token-list/main/src/tokens/base.json";
 
-export const BACKEND_HEROKU_URL = "https://zex-backend-7427db10a09b.herokuapp.com/";
+// export const BACKEND_HEROKU_URL = "https://zex-backend-7427db10a09b.herokuapp.com/";
+export const BACKEND_HEROKU_URL = "http://localhost:5000/";
+
+
+export const PAYMASTER_PROXY_URL = "http://localhost:5000/api/paymaster"; // Calls backend securely
+export const ENTRYPOINT_ADDRESS = "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789"; // ERC-4337 Entrypoint
+export const BASE_CHAIN_ID = "0x2105"; // Base Chain ID
+export const USDC_CONTRACT = "0x833589fCD6eDb6E08f4c7C32D4f71b54bda02913"; // USDC Address on Base

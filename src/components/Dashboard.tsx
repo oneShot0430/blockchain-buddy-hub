@@ -127,8 +127,8 @@ export const Dashboard = () => {
             <div className="mt-2 flex items-center">
               <div className="h-8 w-8 rounded-full bg-green-100" />
               <div className="ml-2">
-                <div className="font-semibold">BONK</div>
-                <div className="text-green-600">+45.2%</div>
+                <div className="font-semibold"></div>
+                <div className="text-green-600"></div>
               </div>
             </div>
           </div>
@@ -137,8 +137,8 @@ export const Dashboard = () => {
             <div className="mt-2 flex items-center">
               <div className="h-8 w-8 rounded-full bg-blue-100" />
               <div className="ml-2">
-                <div className="font-semibold">WIF</div>
-                <div className="text-blue-600">$1.2B Vol</div>
+                <div className="font-semibold"></div>
+                <div className="text-blue-600"></div>
               </div>
             </div>
           </div>
@@ -147,15 +147,15 @@ export const Dashboard = () => {
             <div className="mt-2 flex items-center">
               <div className="h-8 w-8 rounded-full bg-purple-100" />
               <div className="ml-2">
-                <div className="font-semibold">MYRO</div>
-                <div className="text-purple-600">Score: 98</div>
+                <div className="font-semibold"></div>
+                <div className="text-purple-600"></div>
               </div>
             </div>
           </div>
           <div className="bg-orange-50 rounded-lg p-4">
             <div className="text-sm text-orange-600 font-medium">Total Tracked</div>
             <div className="mt-2">
-              <div className="font-semibold text-2xl">{totalToken}</div>
+              <div className="font-semibold text-2xl"></div>
               <div className="text-orange-600 text-sm">Active Tokens</div>
             </div>
           </div>
