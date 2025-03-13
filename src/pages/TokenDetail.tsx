@@ -19,7 +19,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { Navbar } from "@/components/Navbar";
 import { getUSDCBalance } from "@/hooks/getUSDCBalance";
-import { getRoute, confirmRoute, createRangoTransaction, checkApprovalTx, checkStatus } from "@/hooks/rango";
+// import { getRoute, confirmRoute, createRangoTransaction, checkApprovalTx, checkStatus } from "@/hooks/rango";
+import { getRoute, confirmRoute, createTransaction, checkApprovalTx, checkStatus } from "@/hooks/transaction";
 import { USDC } from "@/const/const";
 import { SwapRouteDialog } from "@/components/SwapRouteDialog";
 import { useToast } from "@/components/ui/use-toast";
@@ -131,7 +132,7 @@ const TokenDetail = () => {
       if (!confirmedRoute) {
         throw new Error(`Error in confirming route, ${confirmResponse.error}`)
       }
-      const transactionResponse = await createRangoTransaction(confirmedRoute.requestId, 1, 1);
+      const transactionResponse = await createTransaction(confirmedRoute.requestId, 1, 1);
       console.log("transaction:", transactionResponse);
       if (!transactionResponse.transaction) {
         throw new Error(`Error in swapping, ${transactionResponse.error}`)
