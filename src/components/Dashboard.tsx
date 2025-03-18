@@ -264,7 +264,7 @@ export const Dashboard = () => {
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-900">${data.price.toFixed(4)}</div>
+                    <div className="text-sm text-gray-900">${data.price.toFixed(7)}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className={`text-sm flex items-center gap-1 ${data.change_24h < 0 ? "text-red-600" : "text-green-600"}`}>

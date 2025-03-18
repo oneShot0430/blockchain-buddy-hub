@@ -21,6 +21,7 @@ import { Navbar } from "@/components/Navbar";
 import { getUSDCBalance } from "@/hooks/getUSDCBalance";
 // import { getRoute, confirmRoute, createRangoTransaction, checkApprovalTx, checkStatus } from "@/hooks/rango";
 import { getRoute, confirmRoute, createTransaction, checkApprovalTx, checkStatus } from "@/hooks/transaction";
+import { getSocialData } from "@/hooks/getSocialScore";
 import { USDC } from "@/const/const";
 import { SwapRouteDialog } from "@/components/SwapRouteDialog";
 import { useToast } from "@/components/ui/use-toast";
@@ -47,6 +48,7 @@ const TokenDetail = () => {
   const [showRoutesDialog, setShowRoutesDialog] = useState(false);
   const [routes, setRoutes] = useState<any[]>([]);
   const [selectedRoute, setSelectedRoute] = useState<any>(null);
+  const [socialScore, setSocialScore] = useState<string | number>("N/A");
 
   const toggleTheme = () => {
     setIsDarkMode(!isDarkMode);
@@ -85,6 +87,18 @@ const TokenDetail = () => {
     fetchToken();
   }, [symbol]);
 
+
+  useEffect(() => {
+    const getSocialScore = async () => {
+      if(!tokenData || !tokenData.contract) return;
+      console.log(tokenData.contract);
+      const response = await getSocialData(tokenData.contract);
+      console.log("response:", response);
+      const {slug, data, socialScore, averageScore} = response;
+      setSocialScore(averageScore);
+    }
+    getSocialScore();
+  }, [tokenData])
   useEffect(() => {
     const minPrice = min(chartData.map((d) => d.price));
     const maxPrice = max(chartData.map((d) => d.price));
@@ -452,7 +466,7 @@ const TokenDetail = () => {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+            <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
               <div className="bg-gray-50 p-4 rounded-lg">
                 <div className="text-sm text-gray-500">Market Cap</div>
                 <div className="text-lg font-semibold">${tokenData.market_cap.toLocaleString()}</div>
@@ -465,9 +479,15 @@ const TokenDetail = () => {
                 <div className="text-sm text-gray-500">CMC Rank</div>
                 <div className="text-lg font-semibold">#{tokenData.social_score}</div>
               </div>
+              <a href={`https://basescan.org/token/${tokenData.contract}`} target="_blank" rel="noopener noreferrer">
+                <div className="bg-gray-50 p-4 rounded-lg cursor-pointer hover:bg-gray-100">
+                  <div className="text-sm text-gray-500">Contract</div>
+                  <div className="text-sm font-mono truncate">{tokenData.contract.slice(0, 4)}...{tokenData.contract.slice(-3)}</div>
+                </div>
+              </a>
               <div className="bg-gray-50 p-4 rounded-lg">
-                <div className="text-sm text-gray-500">Contract</div>
-                <div className="text-sm font-mono truncate">{tokenData.contract}</div>
+                <div className="text-sm text-gray-500">Social Score</div>
+                <div className="text-sm font-mono truncate">{socialScore}</div>
               </div>
             </div>
 
