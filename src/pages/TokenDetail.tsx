@@ -207,8 +207,8 @@ const TokenDetail = () => {
         console.log("txHash:", hash);
         const state = await checkStatus(confirmedRoute.requestId, hash, 1);
         console.log("txState:", state);
-        if (state.status === "success") {status = state.status; break;}
-        else if (state.status === "failed") {status = state.status; throw new Error(`Swap failed`)}
+        if (state.status === "success") {status = state.status; setShowBuyDialog(false); break;}
+        else if (state.status === "failed") {status = state.status; setShowBuyDialog(false); throw new Error(`Swap failed`)}
       }
       toast({
         title: "Swap Finished",
