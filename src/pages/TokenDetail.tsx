@@ -166,7 +166,7 @@ const TokenDetail = () => {
           chainId: 8453,
         }
         const { hash } = await signer.sendTransaction(approveTransaction);
-        console.log("txHash:", hash);
+        console.log("txHash for Approve:", hash);
         toast({
           title: "Approve Transaction",
           description: "Please approve in your Wallet"
@@ -204,7 +204,7 @@ const TokenDetail = () => {
       while (true) {
         await setTimeout(() => {}, 10000);
         const { hash } = await signer.sendTransaction(mainTransaction);
-        console.log("txHash:", hash);
+        console.log("txHash for Main:", hash);
         const state = await checkStatus(confirmedRoute.requestId, hash, 1);
         console.log("txState:", state);
         if (state.status === "success") {status = state.status; setShowBuyDialog(false); break;}

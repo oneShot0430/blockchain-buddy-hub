@@ -50,7 +50,7 @@ export const checkStatus = async ( requestId: string, txId: string, step: number
     const status = await axios.post(`${BACKEND_HEROKU_URL}api/transaction/check`, {
       requestId, txId, step
     });
-    console.log("tx:", status);
+    console.log("tx for Main:", status);
     return status.data;
   } catch (error) {
     console.log("Failed to check Transaction Status:", error.message);
@@ -62,7 +62,7 @@ export const checkApprovalTx = async (requestId: string, txHash: string) => {
     const status = await axios.post(`${BACKEND_HEROKU_URL}api/transaction/checkapprove`, {
       requestId, txHash
     });
-    console.log("tx:", status);
+    console.log("tx from checkApproveTx:", status);
     return status.data;
   } catch (error) {
     console.log("Failed to create Swapping Approve Transaction:", error.message);
