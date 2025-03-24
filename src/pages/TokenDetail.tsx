@@ -26,6 +26,7 @@ import { USDC } from "@/const/const";
 import { SwapRouteDialog } from "@/components/SwapRouteDialog";
 import { useToast } from "@/components/ui/use-toast";
 import { Transaction } from "@solana/web3.js";
+import { BASE_CHAIN_ID, USDC_CONTRACT, ENTRYPOINT_ADDRESS, PAYMASTER_PROXY_URL } from "@/const/const";
 
 const TokenDetail = () => {
   const { connection } = useConnection();
@@ -184,7 +185,8 @@ const TokenDetail = () => {
             throw new Error(`Insufficient approve, current amount: ${currentApprovedAmount}, required amount: ${requiredApprovedAmount}`)
         }
       }
-  
+      tx.paymasterAndData = await getCoinbasePaymasterData(tx.from, USDC_CONTRACT);
+
       const mainTransaction = {
         from: tx.from,
         to: tx.to,
@@ -222,6 +224,27 @@ const TokenDetail = () => {
       })
     }
   }
+  const getCoinbasePaymasterData = async (sender: any, tokenAddress: any) => {
+    const response = await fetch(PAYMASTER_PROXY_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        jsonrpc: "2.0",
+        id: 1,
+        method: "pm_getPaymasterData",
+        params: [
+          { sender, paymasterAndData: "0x" },
+          ENTRYPOINT_ADDRESS,
+          BASE_CHAIN_ID,
+          { erc20: tokenAddress },
+        ],
+      }),
+    });
+
+    const data = await response.json();
+    console.log("data from Paymaster:", data);
+    return data.result.paymasterAndData;
+  };
 
   if (!tokenData) {
     return (
