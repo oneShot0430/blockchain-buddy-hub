@@ -41,6 +41,7 @@ const TokenDetail = () => {
   const [maxPrice, setMaxPrice] = useState<number>(1);
   const [showBuyDialog, setShowBuyDialog] = useState(false);
   const [amount, setAmount] = useState("");
+  const [receiptionAddress, setReceiptionAddress] = useState("");
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [logoUri, setLogoUri] = useState("");
   const [pubAddress, setPubAddress] = useState("");
@@ -88,18 +89,25 @@ const TokenDetail = () => {
     fetchToken();
   }, [symbol]);
 
-
+ 
   useEffect(() => {
     const getSocialScore = async () => {
-      if(!tokenData || !tokenData.contract) return;
-      console.log(tokenData.contract);
-      const response = await getSocialData(tokenData.contract);
-      console.log("response:", response);
-      const {slug, data, socialScore, averageScore} = response;
-      setSocialScore(averageScore);
+      try {
+        if(!tokenData || !tokenData.contract) return;
+        console.log(tokenData.contract);
+        const response = await getSocialData(tokenData.contract);
+        console.log("response:", response);
+        const {slug, data, socialScore, averageScore} = response;
+        setSocialScore(averageScore? averageScore : "It is not support now");
+      } catch (error) {
+        setSocialScore("It is not support now");
+        console.log("Error for getting Social Score", error);
+      }
     }
     getSocialScore();
-  }, [tokenData])
+  }, [tokenData]);
+
+
   useEffect(() => {
     const minPrice = min(chartData.map((d) => d.price));
     const maxPrice = max(chartData.map((d) => d.price));
@@ -107,6 +115,11 @@ const TokenDetail = () => {
     setMinPrice(minPrice || 0);
     setMaxPrice(maxPrice || 1);
   }, [chartData]);
+
+  useEffect(() => {
+    if (!pubAddress || !tokenData) return;
+    if (tokenData.platform.name !== "Solana") setReceiptionAddress(pubAddress);
+  }, [pubAddress, tokenData])
 
   const handleBack = () => {
     if (location.key === "default") {
@@ -118,7 +131,7 @@ const TokenDetail = () => {
 
   const handleShowRoutes = async () => {
     try {
-      const allRoutes = await getRoute("BASE", "BASE", "USDC", tokenData.symbol, USDC, tokenData.contract, amount);
+      const allRoutes = await getRoute("BASE", tokenData.platform.name, "USDC", tokenData.symbol, USDC, tokenData.contract, amount);
       console.log("Available routes:", allRoutes);
       setRoutes(allRoutes.results || []);
       // setShowBuyDialog(false);
@@ -139,7 +152,13 @@ const TokenDetail = () => {
 
   const handleBuy = async () => {
     try {
-      
+      if(!receiptionAddress) {
+        toast({
+          title: "No Receiption Address",
+          description: "You must have fill receiption address to this transaction"
+        });
+        return;
+      }
       console.log("Buy tokens");
       const confirmResponse = await confirmRoute(selectedRoute.requestId, "BASE", "BASE", pubAddress, pubAddress);
       const confirmedRoute = confirmResponse.result;
@@ -398,6 +417,17 @@ const TokenDetail = () => {
                     <button onClick={() => setAmount("500")}>500</button>
                     <button onClick={() => setAmount("1000")}>1000</button>
                     <button onClick={() => setAmount("5000")}>5000</button>
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Address {(tokenData.platform.name === "Solana") ? "(Mandatory)": "(Optional)"}</label>
+                  <div className="relative">
+                    <Input
+                      type="string"
+                      placeholder="Please Enter Receiption Address"
+                      value={receiptionAddress}
+                      onChange={(e) => setReceiptionAddress(e.target.value)}
+                    />
                   </div>
                 </div>
 

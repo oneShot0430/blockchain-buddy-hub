@@ -25,6 +25,7 @@ export const defaultData: CMCResult[] = [
     market_cap: 0,
     social_score: 0,
     logo_uri: "",
+    platform: "",
   },
 ];
 

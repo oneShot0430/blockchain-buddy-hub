@@ -67,4 +67,5 @@ export interface CMCResult {
   market_cap: number;
   social_score: number;
   logo_uri?: string; // Added this property as optional
+  platform: any;
 }

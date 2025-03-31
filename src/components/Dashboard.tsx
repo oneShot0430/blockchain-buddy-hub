@@ -39,6 +39,7 @@ export const Dashboard = () => {
 
   useEffect(() => {
     const fetchCMCData = async () => {
+      console.log("memeCoins:", memeCoins);
       if (!memeCoins || memeCoins.length === 0) return;
       const filteredCoins = memeCoins.filter(coin => 
         coin.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
