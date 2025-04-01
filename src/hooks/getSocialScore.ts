@@ -1,10 +1,11 @@
 import axios from "axios";
 import { BACKEND_HEROKU_URL } from "@/const/const";
 
-export const getSocialData = async (tokenAddress) => {
+export const getSocialData = async (tokenAddress, chain) => {
   try {
     const response = await axios.post(`${BACKEND_HEROKU_URL}api/socialdata`, {
-      tokenAddress
+      tokenAddress,
+      chain
     });
     console.log("response:", response.data);
     return response.data;

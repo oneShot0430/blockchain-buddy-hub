@@ -95,7 +95,7 @@ const TokenDetail = () => {
       try {
         if(!tokenData || !tokenData.contract) return;
         console.log(tokenData.contract);
-        const response = await getSocialData(tokenData.contract);
+        const response = await getSocialData(tokenData.contract, tokenData.platform.name);
         console.log("response:", response);
         const {slug, data, socialScore, averageScore} = response;
         setSocialScore(averageScore? averageScore : "It is not support now");
@@ -131,9 +131,13 @@ const TokenDetail = () => {
 
   const handleShowRoutes = async () => {
     try {
-      const allRoutes = await getRoute("BASE", tokenData.platform.name, "USDC", tokenData.symbol, USDC, tokenData.contract, amount);
+      const toChain = tokenData.platform.name === "Ethereum" ? "ETH" : tokenData.platform.name.toUpperCase();
+      const allRoutes = await getRoute("BASE", toChain, "USDC", tokenData.symbol, USDC, tokenData.contract, amount);
       console.log("Available routes:", allRoutes);
-      setRoutes(allRoutes.results || []);
+      const filteredRoutes = (allRoutes?.results || []).filter(
+        result => result.swaps?.length === 1
+      );
+      setRoutes(filteredRoutes);
       // setShowBuyDialog(false);
 
       console.log(routes);
@@ -160,7 +164,8 @@ const TokenDetail = () => {
         return;
       }
       console.log("Buy tokens");
-      const confirmResponse = await confirmRoute(selectedRoute.requestId, "BASE", "BASE", pubAddress, pubAddress);
+      const toChain = tokenData.platform.name === "Ethereum" ? "ETH" : tokenData.platform.name.toUpperCase();
+      const confirmResponse = await confirmRoute(selectedRoute.requestId, "BASE", toChain, pubAddress, receiptionAddress);
       const confirmedRoute = confirmResponse.result;
       console.log("confirmed Route:", confirmedRoute);    
       if (!confirmedRoute) {
@@ -185,8 +190,8 @@ const TokenDetail = () => {
           gasLimit: tx.gasLimit,
           chainId: 8453,
         }
-        const { hash } = await signer.sendTransaction(approveTransaction);
-        console.log("txHash for Approve:", hash);
+        const { ApproveHash } = await signer.sendTransaction(approveTransaction);
+        console.log("txHash for Approve:", ApproveHash);
         toast({
           title: "Approve Transaction",
           description: "Please approve in your Wallet"
@@ -195,7 +200,7 @@ const TokenDetail = () => {
         while (true) {
           // await setTimeout(5000)
           await setTimeout(() => {}, 5000);
-          const { isApproved, currentApprovedAmount, requiredApprovedAmount, txStatus } = await checkApprovalTx(confirmedRoute.requestId, hash)
+          const { isApproved, currentApprovedAmount, requiredApprovedAmount, txStatus } = await checkApprovalTx(confirmedRoute.requestId, ApproveHash)
           if (isApproved)
             break
           else if (txStatus === "failed")
