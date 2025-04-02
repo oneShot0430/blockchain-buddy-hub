@@ -1,8 +1,7 @@
-
 import { CMCResult } from "@/type/interface";
 
 export const USDC = "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913";
-
+export const RANGO_API_KEY = "c6fa7c18-a56d-43e4-a61a-8c83c2775dec"; // Added RANGO_API_KEY
 
 export const BRETT = {
   symbol: 'BRETT', 
