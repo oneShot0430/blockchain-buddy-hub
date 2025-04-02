@@ -1,5 +1,22 @@
+
 import { useWallet } from "@solana/wallet-adapter-react";
-import { Search, Moon, Rocket, Flame, Star, ArrowUp, ArrowDown } from "lucide-react";
+import { 
+  Search, 
+  ChevronUp, 
+  ChevronDown, 
+  LayoutDashboard, 
+  Wallet, 
+  Settings, 
+  FileText, 
+  MoreVertical, 
+  RefreshCw, 
+  TrendingUp, 
+  Clock, 
+  CreditCard, 
+  DollarSign,
+  ArrowUp, 
+  ArrowDown 
+} from "lucide-react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
@@ -113,235 +130,270 @@ export const Dashboard = () => {
   };
 
   if (isLoading) {
-    return <div className="text-center p-4">Loading coins...</div>;
+    return <div className="text-center p-4 text-white bg-[#1A1F2C]">Loading coins...</div>;
   }
 
   if (error) {
-    return <div className="text-center text-red-500 p-4">Error loading coins</div>;
+    return <div className="text-center text-red-500 p-4 bg-[#1A1F2C]">Error loading coins</div>;
   }
 
   return (
-    <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <div className="bg-white rounded-lg shadow p-6 mb-8">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <div className="bg-green-50 rounded-lg p-4">
-            <div className="text-sm text-green-600 font-medium">Biggest Gainer (24h)</div>
-            <div className="mt-2 flex items-center">
-              <div className="h-8 w-8 rounded-full bg-green-100" />
-              <div className="ml-2">
-                <div className="font-semibold"></div>
-                <div className="text-green-600"></div>
+    <div className="flex h-screen bg-[#1A1F2C] text-white">
+      {/* Left Sidebar */}
+      <div className="w-60 bg-[#12151F] flex flex-col">
+        <div className="p-5 flex items-center space-x-2">
+          <div className="w-8 h-8 bg-indigo-700 rounded-lg flex items-center justify-center">
+            <Wallet className="h-4 w-4 text-white" />
+          </div>
+          <span className="text-xl font-bold text-[#9b87f5]">ZEX</span>
+        </div>
+        
+        <div className="flex-1 px-2 py-4">
+          <div className="bg-[#1E2538] text-white p-2 rounded-lg flex items-center space-x-3 mb-2">
+            <LayoutDashboard className="h-5 w-5" />
+            <span className="font-medium">Dashboard</span>
+          </div>
+          <div className="text-gray-400 p-2 rounded-lg flex items-center space-x-3 hover:bg-[#1E2538] transition-colors">
+            <FileText className="h-5 w-5" />
+            <span>Transactions</span>
+          </div>
+          <div className="text-gray-400 p-2 rounded-lg flex items-center space-x-3 hover:bg-[#1E2538] transition-colors">
+            <Settings className="h-5 w-5" />
+            <span>Settings</span>
+          </div>
+        </div>
+        
+        <div className="p-4 border-t border-gray-800">
+          <div className="flex justify-between items-center mb-2">
+            <span className="text-sm text-gray-400">Smart Wallet</span>
+            <span className="text-xs bg-indigo-800 text-indigo-200 px-2 py-0.5 rounded-full">Active</span>
+          </div>
+          <div className="bg-[#1E2538] rounded-lg p-3 mb-2">
+            <div className="flex justify-between items-center">
+              <span className="text-xs text-gray-400">0x12...3456</span>
+              <div className="bg-indigo-600 rounded-md p-1">
+                <CreditCard className="h-4 w-4" />
               </div>
             </div>
           </div>
-          <div className="bg-blue-50 rounded-lg p-4">
-            <div className="text-sm text-blue-600 font-medium">Most Traded</div>
-            <div className="mt-2 flex items-center">
-              <div className="h-8 w-8 rounded-full bg-blue-100" />
-              <div className="ml-2">
-                <div className="font-semibold"></div>
-                <div className="text-blue-600"></div>
-              </div>
+          <div className="grid grid-cols-2 gap-2">
+            <div className="bg-[#1E2538] rounded-lg p-2 text-center">
+              <div className="text-xs text-gray-400">BASE</div>
+              <div className="font-bold">--</div>
             </div>
-          </div>
-          <div className="bg-purple-50 rounded-lg p-4">
-            <div className="text-sm text-purple-600 font-medium">Highest Social Score</div>
-            <div className="mt-2 flex items-center">
-              <div className="h-8 w-8 rounded-full bg-purple-100" />
-              <div className="ml-2">
-                <div className="font-semibold"></div>
-                <div className="text-purple-600"></div>
-              </div>
-            </div>
-          </div>
-          <div className="bg-orange-50 rounded-lg p-4">
-            <div className="text-sm text-orange-600 font-medium">Total Tracked</div>
-            <div className="mt-2">
-              <div className="font-semibold text-2xl"></div>
-              <div className="text-orange-600 text-sm">Active Tokens</div>
+            <div className="bg-[#1E2538] rounded-lg p-2 text-center">
+              <div className="text-xs text-gray-400">BNB</div>
+              <div className="font-bold">--</div>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="bg-white rounded-lg shadow mb-8">
-        <div className="p-4 border-b border-gray-200">
-          <div className="flex flex-wrap gap-4 items-center justify-between">
-            <div className="flex flex-wrap gap-4 items-center">
-              <Button variant="default" className="flex items-center gap-2">
-                <Rocket className="h-4 w-4" /> Top Movers
-              </Button>
-              <Button variant="outline" className="flex items-center gap-2">
-                <Flame className="h-4 w-4" /> Trending
-              </Button>
-              <Button variant="outline" className="flex items-center gap-2">
-                <Star className="h-4 w-4" /> New Listings
-              </Button>
-              <Select>
-                <SelectTrigger className="w-[140px]">
-                  <SelectValue placeholder="All Chains" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Chains</SelectItem>
-                  <SelectItem value="solana">Solana</SelectItem>
-                  <SelectItem value="ethereum">Ethereum</SelectItem>
-                  <SelectItem value="bsc">BSC</SelectItem>
-                </SelectContent>
-              </Select>
-              <Select>
-                <SelectTrigger className="w-[100px]">
-                  <SelectValue placeholder="24h" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="24h">24h</SelectItem>
-                  <SelectItem value="7d">7d</SelectItem>
-                  <SelectItem value="30d">30d</SelectItem>
-                </SelectContent>
-              </Select>
+      {/* Main Content */}
+      <div className="flex-1 overflow-auto">
+        {/* Header */}
+        <div className="px-8 py-6 border-b border-gray-800">
+          <div className="flex justify-between items-center">
+            <div>
+              <h1 className="text-2xl font-bold text-[#9b87f5]">Hi Trader</h1>
+              <p className="text-gray-400">Auto-invest in alpha with one-click</p>
+              <div className="flex items-center mt-2 text-sm">
+                <div className="w-2 h-2 bg-green-400 rounded-full mr-2"></div>
+                <span className="text-gray-300">You and <span className="text-[#9b87f5]">433+</span> others trading today</span>
+              </div>
             </div>
-            <div className="relative w-full md:w-64">
-              <Search className="absolute left-2 top-2.5 h-4 w-4 text-gray-500" />
-              <Input
-                placeholder="Search coins..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-8"
-              />
+            <Button className="bg-[#7E69AB] hover:bg-[#6E59A5] text-white flex items-center gap-2 px-4">
+              <span>Register</span>
+            </Button>
+          </div>
+        </div>
+
+        {/* Stats Cards */}
+        <div className="grid grid-cols-4 gap-6 p-6">
+          <div className="bg-[#1E2538] rounded-lg p-5">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-gray-400">Active Trades</h3>
+              <TrendingUp className="h-5 w-5 text-[#9b87f5]" />
+            </div>
+            <div className="text-3xl font-bold">0</div>
+            <div className="w-full h-1 bg-gray-700 mt-2">
+              <div className="h-1 bg-[#9b87f5] w-0"></div>
+            </div>
+          </div>
+          <div className="bg-[#1E2538] rounded-lg p-5">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-gray-400">24h Performance</h3>
+              <TrendingUp className="h-5 w-5 text-[#9b87f5]" />
+            </div>
+            <div className="text-3xl font-bold">0.0%</div>
+            <div className="text-sm text-gray-400">$0.00</div>
+          </div>
+          <div className="bg-[#1E2538] rounded-lg p-5">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-gray-400">Auto-Invested</h3>
+              <Clock className="h-5 w-5 text-[#9b87f5]" />
+            </div>
+            <div className="text-3xl font-bold text-[#9b87f5]">$0.00</div>
+            <div className="text-sm text-gray-400">0 transactions</div>
+          </div>
+          <div className="bg-[#1E2538] rounded-lg p-5">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-gray-400">Available Balance</h3>
+              <DollarSign className="h-5 w-5 text-[#9b87f5]" />
+            </div>
+            <div className="p-6 bg-[#1A1F2C] rounded-md flex items-center justify-center">
+              <span className="text-gray-400">All chains combined</span>
             </div>
           </div>
         </div>
 
-        <div className="overflow-x-auto">
-          <table className="w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
-              <tr>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Token
-                </th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Price
-                </th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  24h Change
-                </th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  7d Change
-                </th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Volume
-                </th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Market Cap
-                </th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  CMC Ranking
-                </th>
-              </tr>
-            </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
-              {coinData.map((data, index) => (
-                <tr 
-                  key={index} 
-                  onClick={() => handleTokenClick(data.symbol)}
-                  className="cursor-pointer hover:bg-gray-50 transition-colors"
-                >
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="flex items-center">
-                      <div className="flex-shrink-0 h-10 w-10">
-                        {data.logo_uri ? (
-                          <img
-                            src={data.logo_uri}
-                            alt={data.name}
-                            className="h-10 w-10 rounded-full object-cover"
-                          />
-                        ) : (
-                          <div className="h-10 w-10 rounded-full bg-gray-100" />
-                        )}
-                      </div>
-                      <div className="ml-4">
-                        <div className="font-medium text-gray-900">{data.name}</div>
-                        <div className="text-sm text-gray-500">{data.symbol}</div>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-900">${data.price.toFixed(7)}</div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className={`text-sm flex items-center gap-1 ${data.change_24h < 0 ? "text-red-600" : "text-green-600"}`}>
-                      {data.change_24h < 0 ? (
-                        <ArrowDown className="h-4 w-4" />
-                      ) : (
-                        <ArrowUp className="h-4 w-4" />
-                      )}
-                      {Math.abs(data.change_24h).toFixed(2)}%
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className={`text-sm flex items-center gap-1 ${data.change_7d < 0 ? "text-red-600" : "text-green-600"}`}>
-                      {data.change_7d < 0 ? (
-                        <ArrowDown className="h-4 w-4" />
-                      ) : (
-                        <ArrowUp className="h-4 w-4" />
-                      )}
-                      {Math.abs(data.change_7d).toFixed(2)}%
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-900">${data.volume_24h.toLocaleString()}</div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-900">${data.market_cap.toLocaleString()}</div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="flex items-center">
-                      <div className="h-2 w-24 bg-gray-200 rounded">
-                        <div 
-                          className="h-2 bg-green-500 rounded" 
-                          style={{ width: `${Math.min(100, (data.social_score / 100) * 100)}%` }} 
-                        />
-                      </div>
-                      <span className="ml-2 text-sm text-gray-700">{data.social_score}</span>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+        {/* Token Table */}
+        <div className="mx-6 mb-6 bg-[#1E2538] rounded-lg overflow-hidden">
+          <div className="p-4 border-b border-gray-800 flex justify-between items-center">
+            <h2 className="text-xl font-bold flex items-center">
+              <span className="mr-2">Top Performing Tokens</span>
+              <div className="w-32 h-1 bg-[#9b87f5]"></div>
+            </h2>
+            <div className="flex items-center gap-2">
+              <span className="text-sm text-gray-400">Auto-updates: 2 min</span>
+              <RefreshCw className="h-4 w-4 text-[#9b87f5]" />
+              <MoreVertical className="h-4 w-4 text-gray-400" />
+            </div>
+          </div>
 
-        <div className="p-4 border-t border-gray-200">
-          <Pagination>
-            <PaginationContent>
-              <PaginationItem>
-                <PaginationPrevious 
-                  onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
-                  className={currentPage === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
-                />
-              </PaginationItem>
-              {getPageNumbers().map((page, index) => (
-                <PaginationItem key={index}>
-                  {page === '...' ? (
-                    <span className="px-4 py-2">...</span>
-                  ) : (
-                    <PaginationLink
-                      onClick={() => typeof page === 'number' && setCurrentPage(page)}
-                      isActive={currentPage === page}
-                      className={typeof page === 'number' ? 'cursor-pointer' : ''}
-                    >
-                      {page}
-                    </PaginationLink>
-                  )}
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead className="bg-[#1A1F2C] text-gray-400 text-xs uppercase">
+                <tr>
+                  <th className="px-6 py-3 text-left">Token</th>
+                  <th className="px-6 py-3 text-left">Price</th>
+                  <th className="px-6 py-3 text-left">1h Change</th>
+                  <th className="px-6 py-3 text-left">24h Change</th>
+                  <th className="px-6 py-3 text-left">Volume (24h)</th>
+                  <th className="px-6 py-3 text-left">Market Cap</th>
+                  <th className="px-6 py-3 text-left">Social Score</th>
+                  <th className="px-6 py-3 text-left">Auto-Invest</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-800">
+                {coinData.map((data, index) => (
+                  <tr 
+                    key={index} 
+                    onClick={() => handleTokenClick(data.symbol)}
+                    className="cursor-pointer hover:bg-[#222533] transition-colors"
+                  >
+                    <td className="px-6 py-4">
+                      <div className="flex items-center">
+                        <div className="flex-shrink-0 h-8 w-8">
+                          {data.logo_uri ? (
+                            <img
+                              src={data.logo_uri}
+                              alt={data.name}
+                              className="h-8 w-8 rounded-full object-cover"
+                            />
+                          ) : (
+                            <div className="h-8 w-8 rounded-full bg-gray-700" />
+                          )}
+                        </div>
+                        <div className="ml-4">
+                          <div className="font-medium">{data.name}</div>
+                          <div className="text-sm text-gray-400">{data.symbol}</div>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="text-sm">${data.price.toFixed(7)}</div>
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className={`text-sm flex items-center gap-1 ${data.change_24h < 0 ? "text-red-500" : "text-green-500"}`}>
+                        {data.change_24h < 0 ? (
+                          <ArrowDown className="h-4 w-4" />
+                        ) : (
+                          <ArrowUp className="h-4 w-4" />
+                        )}
+                        {Math.abs(data.change_24h).toFixed(2)}%
+                      </div>
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className={`text-sm flex items-center gap-1 ${data.change_7d < 0 ? "text-red-500" : "text-green-500"}`}>
+                        {data.change_7d < 0 ? (
+                          <ArrowDown className="h-4 w-4" />
+                        ) : (
+                          <ArrowUp className="h-4 w-4" />
+                        )}
+                        {Math.abs(data.change_7d).toFixed(2)}%
+                      </div>
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="text-sm">${data.volume_24h.toLocaleString()}</div>
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="text-sm">${data.market_cap.toLocaleString()}</div>
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="flex items-center">
+                        <div className="h-2 w-20 bg-gray-700 rounded">
+                          <div 
+                            className="h-2 bg-[#9b87f5] rounded" 
+                            style={{ width: `${Math.min(100, (data.social_score / 100) * 100)}%` }} 
+                          />
+                        </div>
+                        <span className="ml-2 text-sm">{data.social_score}</span>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4">
+                      <Button 
+                        variant="outline" 
+                        className="bg-[#7E69AB] hover:bg-[#6E59A5] border-none text-white text-xs py-1 px-3"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          // Auto-invest functionality would go here
+                        }}
+                      >
+                        Auto-invest $10
+                      </Button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          <div className="p-4 border-t border-gray-800 bg-[#1A1F2C]">
+            <Pagination>
+              <PaginationContent>
+                <PaginationItem>
+                  <PaginationPrevious 
+                    onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+                    className={`${currentPage === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"} bg-[#1E2538] border-none text-gray-300`}
+                  />
                 </PaginationItem>
-              ))}
-              <PaginationItem>
-                <PaginationNext 
-                  onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
-                  className={currentPage === totalPages ? "pointer-events-none opacity-50" : "cursor-pointer"}
-                />
-              </PaginationItem>
-            </PaginationContent>
-          </Pagination>
+                {getPageNumbers().map((page, index) => (
+                  <PaginationItem key={index}>
+                    {page === '...' ? (
+                      <span className="px-4 py-2 text-gray-400">...</span>
+                    ) : (
+                      <PaginationLink
+                        onClick={() => typeof page === 'number' && setCurrentPage(page)}
+                        isActive={currentPage === page}
+                        className={`${typeof page === 'number' ? 'cursor-pointer' : ''} ${
+                          currentPage === page ? 'bg-[#7E69AB] text-white' : 'bg-[#1E2538] text-gray-300'
+                        } border-none`}
+                      >
+                        {page}
+                      </PaginationLink>
+                    )}
+                  </PaginationItem>
+                ))}
+                <PaginationItem>
+                  <PaginationNext 
+                    onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+                    className={`${currentPage === totalPages ? "pointer-events-none opacity-50" : "cursor-pointer"} bg-[#1E2538] border-none text-gray-300`}
+                  />
+                </PaginationItem>
+              </PaginationContent>
+            </Pagination>
+          </div>
         </div>
       </div>
     </div>
