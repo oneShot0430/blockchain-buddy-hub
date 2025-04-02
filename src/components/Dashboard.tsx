@@ -1,4 +1,4 @@
-import { useWallet } from "@solana/wallet-adapter-react";
+import { useWallet } from "@/lib/mock/solana-wallet-adapter";
 import { 
   Search, 
   ChevronUp, 

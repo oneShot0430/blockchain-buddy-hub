@@ -1,6 +1,7 @@
+
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
-import { BrowserProvider, formatEther } from "ethers";
+import { BrowserProvider, formatEther } from "@/lib/mock/ethers";
 import { Wallet } from "lucide-react";
 import { useState } from "react";
 
@@ -11,16 +12,9 @@ export const WalletConnect = () => {
 
   const connectWallet = async () => {
     try {
-      if (!window.ethereum) {
-        toast({
-          title: "Metamask not found",
-          description: "Please install Metamask browser extension",
-          variant: "destructive",
-        });
-        return;
-      }
-
-      const provider = new BrowserProvider(window.ethereum);
+      // Mock ethereum object
+      const mockEthereum = {};
+      const provider = new BrowserProvider(mockEthereum);
       const accounts = await provider.send("eth_requestAccounts", []);
       const account = accounts[0];
       setAddress(account);

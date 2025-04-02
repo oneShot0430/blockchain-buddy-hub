@@ -11,16 +11,16 @@ import { useMemo } from "react";
 import {
   WalletProvider,
   ConnectionProvider,
-} from "@solana/wallet-adapter-react";
-import { WalletModalProvider } from "@solana/wallet-adapter-react-ui";
-import { clusterApiUrl } from "@solana/web3.js";
-import { PhantomWalletAdapter } from "@solana/wallet-adapter-wallets";
+} from "@/lib/mock/solana-wallet-adapter";
+import { WalletModalProvider } from "@/lib/mock/solana-wallet-adapter";
+import { clusterApiUrl, PhantomWalletAdapter } from "@/lib/mock/solana-wallet-adapter";
+
 const queryClient = new QueryClient();
 
 const App = () => {
   const endpoint = useMemo(() => clusterApiUrl("devnet"), []);
-
   const wallets = useMemo(() => [new PhantomWalletAdapter()], []);
+  
   return (
     <QueryClientProvider client={queryClient}>
       <ConnectionProvider endpoint={endpoint}>
