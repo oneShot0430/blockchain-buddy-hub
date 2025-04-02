@@ -7,7 +7,7 @@ import { HashRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import Roadmap from "./pages/Roadmap";
 import TokenDetail from "./pages/TokenDetail";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import {
   WalletProvider,
   ConnectionProvider,
@@ -32,7 +32,6 @@ const App = () => {
               <HashRouter>
                 <Routes>
                   <Route path="/" element={<Index />} />
-                  {/* <Route path="/trading" element={<Trading />} /> */}
                   <Route path="/roadmap" element={<Roadmap />} />
                   <Route path="/token/:symbol" element={<TokenDetail />} />
                 </Routes>
