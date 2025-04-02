@@ -63,7 +63,6 @@ export const Dashboard = () => {
   const [totalToken, setTotalToken] = useState(0);
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [pubAddress, setPubAddress] = useState("");
-
   const itemsPerPage = 50;
 
   const toggleTheme = () => {
@@ -75,17 +74,16 @@ export const Dashboard = () => {
     navigate(`/token/${symbol}`);
   };
 
-  useEffect(() => {
-    const getSinger = async () => {
-      if (!window.ethereum) return;
-      const provider = new BrowserProvider(window.ethereum);
-      const signer = await provider.getSigner();
-      console.log("Signer:", signer.address);
-      setPubAddress(signer.address);
-    }
-
-    getSinger();
-  }, [window.ethereum]);
+    useEffect(() => {
+      const getBalance = async () => {
+        if (!window.ethereum) return;
+        const provider = new BrowserProvider(window.ethereum);
+        const signer = await provider.getSigner();
+        setPubAddress(signer.address);
+      }
+  
+      getBalance();
+    }, [window.ethereum]);
 
   useEffect(() => {
     const fetchCMCData = async () => {
@@ -201,9 +199,9 @@ export const Dashboard = () => {
           </div>
           <div className="bg-[#1E2538] rounded-lg p-3 mb-2">
             <div className="flex justify-between items-center">
-                {pubAddress ? 
-                  <span className="text-xs text-gray-400">{pubAddress.slice(0, 6)}...{pubAddress.slice(-4)}</span> :
-                  <span className="text-xs text-gray-400">{""}</span>
+              {pubAddress ? 
+                <span className="text-xs text-gray-400">{pubAddress.slice(0, 6)}...{pubAddress.slice(-4)}</span> : 
+                <span className="text-xs text-gray-400"></span>
                 }
               <div className="bg-indigo-600 rounded-md p-1">
                 <CreditCard className="h-4 w-4" />
@@ -313,7 +311,7 @@ export const Dashboard = () => {
                   <th className="px-6 py-3 text-left">24h Change</th>
                   <th className="px-6 py-3 text-left">Volume (24h)</th>
                   <th className="px-6 py-3 text-left">Market Cap</th>
-                  <th className="px-6 py-3 text-left">Social Score</th>
+                  <th className="px-6 py-3 text-left">CMC Ranking</th>
                   <th className="px-6 py-3 text-left">Auto-Invest</th>
                 </tr>
               </thead>

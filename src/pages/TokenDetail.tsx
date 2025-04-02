@@ -314,8 +314,8 @@ const TokenDetail = () => {
             <div className="bg-[#1E2538] rounded-lg p-3 mb-2">
               <div className="flex justify-between items-center">
                 {pubAddress ? 
-                  <span className="text-xs text-gray-400">{pubAddress.slice(0, 6)}...{pubAddress.slice(-4)}</span> :
-                  <span className="text-xs text-gray-400">{""}</span>
+                  <span className="text-xs text-gray-400">{pubAddress.slice(0, 6)}...{pubAddress.slice(-4)}</span> : 
+                  <span className="text-xs text-gray-400"></span>
                 }
                 <div className="bg-indigo-600 rounded-md p-1">
                   <CreditCard className="h-4 w-4" />
