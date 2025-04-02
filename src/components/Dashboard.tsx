@@ -1,4 +1,3 @@
-
 import { useWallet } from "@solana/wallet-adapter-react";
 import { 
   Search, 
@@ -39,6 +38,16 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 
+const formatNumber = (num: number): string => {
+  if (num >= 1000000) {
+    return `$${(num / 1000000).toFixed(2)}M`;
+  } else if (num >= 1000) {
+    return `$${(num / 1000).toFixed(2)}K`;
+  } else {
+    return `$${num.toFixed(2)}`;
+  }
+};
+
 export const Dashboard = () => {
   const navigate = useNavigate();
   const { data: memeCoins, isLoading, error } = useQuery({
@@ -74,7 +83,6 @@ export const Dashboard = () => {
       setTotalPages(Math.ceil(filteredCoins.length / itemsPerPage));
       const startIndex = (currentPage - 1) * itemsPerPage;
       const endIndex = startIndex + itemsPerPage;
-      // const extraSymbols = ["TOSHI", "DEGEN", "TYBG", "$mfer"];
       const tokensymbols = filteredCoins.map(token => token.symbol);
       const cmcResult = await getTokenData(tokensymbols.slice(startIndex, endIndex));
       
@@ -148,7 +156,6 @@ export const Dashboard = () => {
 
   return (
     <div className="flex h-screen bg-[#1A1F2C] text-white">
-      {/* Left Sidebar */}
       <div className="w-60 bg-[#12151F] flex flex-col">
         <div className="p-5 flex items-center space-x-2">
           <div className="w-8 h-8 bg-indigo-700 rounded-lg flex items-center justify-center">
@@ -198,9 +205,7 @@ export const Dashboard = () => {
         </div>
       </div>
 
-      {/* Main Content */}
       <div className="flex-1 overflow-auto">
-        {/* Header */}
         <div className="px-8 py-6 border-b border-gray-800">
           <div className="flex justify-between items-center">
             <div>
@@ -229,7 +234,6 @@ export const Dashboard = () => {
           </div>
         </div>
 
-        {/* Stats Cards */}
         <div className="grid grid-cols-4 gap-6 p-6">
           <div className="bg-[#1E2538] rounded-lg p-5">
             <div className="flex justify-between items-center mb-4">
@@ -268,7 +272,6 @@ export const Dashboard = () => {
           </div>
         </div>
 
-        {/* Token Table */}
         <div className="mx-6 mb-6 bg-[#1E2538] rounded-lg overflow-hidden">
           <div className="p-4 border-b border-gray-800 flex justify-between items-center">
             <h2 className="text-xl font-bold flex items-center">
@@ -346,10 +349,10 @@ export const Dashboard = () => {
                       </div>
                     </td>
                     <td className="px-6 py-4">
-                      <div className="text-sm">${data.volume_24h.toLocaleString()}</div>
+                      <div className="text-sm">{formatNumber(data.volume_24h)}</div>
                     </td>
                     <td className="px-6 py-4">
-                      <div className="text-sm">${data.market_cap.toLocaleString()}</div>
+                      <div className="text-sm">{formatNumber(data.market_cap)}</div>
                     </td>
                     <td className="px-6 py-4">
                       <div className="flex items-center">
@@ -368,7 +371,6 @@ export const Dashboard = () => {
                         className="bg-[#7E69AB] hover:bg-[#6E59A5] border-none text-white text-xs py-1 px-3"
                         onClick={(e) => {
                           e.stopPropagation();
-                          // Auto-invest functionality would go here
                         }}
                       >
                         Auto-invest $10
