@@ -18,6 +18,7 @@ import {
   Sun,
   Moon
 } from "lucide-react";
+import { BrowserProvider } from "ethers";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
@@ -61,6 +62,8 @@ export const Dashboard = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [totalToken, setTotalToken] = useState(0);
   const [isDarkMode, setIsDarkMode] = useState(false);
+  const [pubAddress, setPubAddress] = useState("");
+
   const itemsPerPage = 50;
 
   const toggleTheme = () => {
@@ -71,6 +74,18 @@ export const Dashboard = () => {
   const handleTokenClick = (symbol: string) => {
     navigate(`/token/${symbol}`);
   };
+
+  useEffect(() => {
+    const getSinger = async () => {
+      if (!window.ethereum) return;
+      const provider = new BrowserProvider(window.ethereum);
+      const signer = await provider.getSigner();
+      console.log("Signer:", signer.address);
+      setPubAddress(signer.address);
+    }
+
+    getSinger();
+  }, [window.ethereum]);
 
   useEffect(() => {
     const fetchCMCData = async () => {
@@ -186,7 +201,10 @@ export const Dashboard = () => {
           </div>
           <div className="bg-[#1E2538] rounded-lg p-3 mb-2">
             <div className="flex justify-between items-center">
-              <span className="text-xs text-gray-400">0x12...3456</span>
+                {pubAddress ? 
+                  <span className="text-xs text-gray-400">{pubAddress.slice(0, 6)}...{pubAddress.slice(-4)}</span> :
+                  <span className="text-xs text-gray-400">{""}</span>
+                }
               <div className="bg-indigo-600 rounded-md p-1">
                 <CreditCard className="h-4 w-4" />
               </div>
