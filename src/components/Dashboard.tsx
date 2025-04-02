@@ -15,7 +15,9 @@ import {
   CreditCard, 
   DollarSign,
   ArrowUp, 
-  ArrowDown 
+  ArrowDown,
+  Sun,
+  Moon
 } from "lucide-react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
@@ -27,6 +29,7 @@ import { getTokenData } from "@/hooks/getTokenData";
 import { CMCResult } from "@/type/interface";
 import { defaultData } from "@/const/const";
 import { useNavigate } from "react-router-dom";
+import { WalletConnect } from "@/components/WalletConnect";
 import {
   Pagination,
   PaginationContent,
@@ -48,7 +51,13 @@ export const Dashboard = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [totalToken, setTotalToken] = useState(0);
+  const [isDarkMode, setIsDarkMode] = useState(false);
   const itemsPerPage = 50;
+
+  const toggleTheme = () => {
+    setIsDarkMode(!isDarkMode);
+    document.documentElement.classList.toggle('dark');
+  };
 
   const handleTokenClick = (symbol: string) => {
     navigate(`/token/${symbol}`);
@@ -202,9 +211,21 @@ export const Dashboard = () => {
                 <span className="text-gray-300">You and <span className="text-[#9b87f5]">433+</span> others trading today</span>
               </div>
             </div>
-            <Button className="bg-[#7E69AB] hover:bg-[#6E59A5] text-white flex items-center gap-2 px-4">
-              <span>Register</span>
-            </Button>
+            <div className="flex items-center gap-4">
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={toggleTheme}
+                className="rounded-full"
+              >
+                {isDarkMode ? (
+                  <Sun className="h-5 w-5" />
+                ) : (
+                  <Moon className="h-5 w-5" />
+                )}
+              </Button>
+              <WalletConnect />
+            </div>
           </div>
         </div>
 

@@ -11,7 +11,6 @@ import { PhantomWalletAdapter } from "@solana/wallet-adapter-wallets";
 import { useMemo, useState } from "react";
 import { useLocation } from "react-router-dom";
 import "@solana/wallet-adapter-react-ui/styles.css";
-import { Navbar } from "@/components/Navbar";
 
 const Index = () => {
   const endpoint = useMemo(() => clusterApiUrl("devnet"), []);
@@ -27,11 +26,6 @@ const Index = () => {
   return (
     <div className={`min-h-screen ${isDarkMode ? 'dark' : ''}`}>
       <div className="dark:bg-background">
-        <Navbar
-          isDarkMode={isDarkMode}
-          toggleTheme={toggleTheme}
-          currentPath={location.pathname}
-        />
         <Dashboard />
       </div>
     </div>
