@@ -94,7 +94,6 @@ export const getTokenData = async (tokenSymbols) => {
     const response = await axios.get(`${BACKEND_HEROKU_URL}api/tokens`, {
       params: { symbols: tokenSymbols.join(",") },
     });
-    console.log("response:", response.data);
     return response.data;
   } catch (error) {
     console.error("Error fetching token data:", error.message);

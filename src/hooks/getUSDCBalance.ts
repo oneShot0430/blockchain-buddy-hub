@@ -10,7 +10,6 @@ const usdcContract = new ethers.Contract(baseUSDCContractAddress, usdcAbi, provi
 export const getUSDCBalance = async (walletAddress: string) : Promise<string>=> {
   const balance = await usdcContract.balanceOf(walletAddress);
   const balanceDecimal = ethers.formatUnits(balance, 6); // USDC has 6 decimals
-  console.log(`Base USDC Balance: ${balanceDecimal}`);
 
   return balanceDecimal;
 }

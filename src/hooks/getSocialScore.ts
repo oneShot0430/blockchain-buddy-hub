@@ -7,7 +7,6 @@ export const getSocialData = async (tokenAddress, chain) => {
       tokenAddress,
       chain
     });
-    console.log("response:", response.data);
     return response.data;
   } catch (error) {
     console.error("Error fetching token data:", error.message);

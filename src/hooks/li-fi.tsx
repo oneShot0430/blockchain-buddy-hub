@@ -33,11 +33,8 @@ export const transfer = async (fromChain: String, toChain: String, fromToken: St
   if (!window.ethereum) return;
   const provider = new BrowserProvider(window.ethereum);
   const signer = await provider.getSigner();
-  console.log("signer:", signer.address);
   const quote = await getQuote(fromChain, toChain, fromToken, toToken, fromAmount, signer.address, toAddress);
-  console.log("quote:", quote);
   const tx = await signer.sendTransaction(quote.transactionRequest);
-  console.log("transaction", tx);
   await tx.wait();
 
   let result: any;

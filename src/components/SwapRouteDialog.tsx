@@ -25,7 +25,6 @@ export const SwapRouteDialog = ({
   toToken,
   onSelectRoute 
 }: SwapRouteDialogProps) => {
-  console.log("routes:", routes);
   if (!routes) return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-md">

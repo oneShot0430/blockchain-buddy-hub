@@ -73,11 +73,9 @@ const TokenDetail = () => {
       if (!window.ethereum) return;
       const provider = new BrowserProvider(window.ethereum);
       const signer = await provider.getSigner();
-      console.log("Signer:", signer.address);
       setPubAddress(signer.address);
       setSigner(signer);
       const baseUSDCBalance = await getUSDCBalance(signer.address);
-      console.log("baseUSDCBalance:", baseUSDCBalance);
       setUsdcBalance(baseUSDCBalance);
     }
 
@@ -88,7 +86,6 @@ const TokenDetail = () => {
     const fetchToken = async () => {
       if (symbol) {
         const data = await getTokenData([symbol]);
-        console.log(data);
         if (data.length > 0) {
           setTokenData(data[0]);
           const {formattedData, logo_uri} = await fetchHistoricalData(data[0].symbol);
@@ -105,14 +102,12 @@ const TokenDetail = () => {
     const getSocialScore = async () => {
       try {
         if(!tokenData || !tokenData.contract) return;
-        console.log(tokenData.contract);
         const response = await getSocialData(tokenData.contract, tokenData.platform.name);
-        console.log("response:", response);
         const {slug, data, socialScore, averageScore} = response;
         setSocialScore(averageScore? averageScore : "It is not support now");
       } catch (error) {
         setSocialScore("It is not support now");
-        console.log("Error for getting Social Score", error);
+        console.error("Error for getting Social Score", error);
       }
     }
     getSocialScore();
@@ -122,7 +117,6 @@ const TokenDetail = () => {
   useEffect(() => {
     const minPrice = min(chartData.map((d) => d.price));
     const maxPrice = max(chartData.map((d) => d.price));
-    console.log(minPrice, maxPrice);
     setMinPrice(minPrice || 0);
     setMaxPrice(maxPrice || 1);
   }, [chartData]);
@@ -144,14 +138,12 @@ const TokenDetail = () => {
     try {
       const toChain = tokenData.platform.name === "Ethereum" ? "ETH" : tokenData.platform.name.toUpperCase();
       const allRoutes = await getRoute("BASE", toChain, "USDC", tokenData.symbol, USDC, tokenData.contract, amount);
-      console.log("Available routes:", allRoutes);
       const filteredRoutes = (allRoutes?.results || []).filter(
         result => result.swaps?.length === 1
       );
       setRoutes(filteredRoutes);
       // setShowBuyDialog(false);
 
-      console.log(routes);
       setShowRoutesDialog(true);
     } catch (error) {
       console.error("Error fetching routes:", error);
@@ -159,7 +151,6 @@ const TokenDetail = () => {
   };
 
   const handleSelectRoute = (route: any) => {
-    console.log("Selected route:", route);
     setSelectedRoute(route);
     setShowRoutesDialog(false);
     setShowBuyDialog(true);
@@ -174,16 +165,13 @@ const TokenDetail = () => {
         });
         return;
       }
-      console.log("Buy tokens");
       const toChain = tokenData.platform.name === "Ethereum" ? "ETH" : tokenData.platform.name.toUpperCase();
       const confirmResponse = await confirmRoute(selectedRoute.requestId, "BASE", toChain, pubAddress, receiptionAddress);
       const confirmedRoute = confirmResponse.result;
-      console.log("confirmed Route:", confirmedRoute);    
       if (!confirmedRoute) {
         throw new Error(`Error in confirming route, ${confirmResponse.error}`)
       }
       const transactionResponse = await createTransaction(confirmedRoute.requestId, 1, 1);
-      console.log("transaction:", transactionResponse);
       if (!transactionResponse.transaction) {
         throw new Error(`Error in swapping, ${transactionResponse.error}`)
       }
@@ -202,7 +190,6 @@ const TokenDetail = () => {
           chainId: 8453,
         }
         const { ApproveHash } = await signer.sendTransaction(approveTransaction);
-        console.log("txHash for Approve:", ApproveHash);
         toast({
           title: "Approve Transaction",
           description: "Please approve in your Wallet"
@@ -241,9 +228,7 @@ const TokenDetail = () => {
       while (true) {
         await setTimeout(() => {}, 10000);
         const { hash } = await signer.sendTransaction(mainTransaction);
-        console.log("txHash for Main:", hash);
         const state = await checkStatus(confirmedRoute.requestId, hash, 1);
-        console.log("txState:", state);
         if (state.status === "success") {status = state.status; setShowBuyDialog(false); break;}
         else if (state.status === "failed") {status = state.status; setShowBuyDialog(false); throw new Error(`Swap failed`)}
       }
@@ -252,7 +237,6 @@ const TokenDetail = () => {
         description: `Swapping ${amount} USDC on Base to ${tokenData.symbol} is ${status}`,
       });
     } catch (error) {
-      console.log("error:", error);
       toast({
         title: "Error occured in Swapping",
         description: error,
@@ -277,7 +261,6 @@ const TokenDetail = () => {
     });
 
     const data = await response.json();
-    console.log("data from Paymaster:", data);
     return data.result.paymasterAndData;
   };
 
