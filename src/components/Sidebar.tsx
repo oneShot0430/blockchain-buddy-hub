@@ -69,7 +69,7 @@ export const SideBarPanel = () => {
             <div className="font-bold">--</div>
           </div>
           <div className="bg-[#1E2538] rounded-lg p-2 text-center">
-            <div className="text-xs text-gray-400">BNB</div>
+            <div className="text-xs text-gray-400">SOLANA</div>
             <div className="font-bold">--</div>
           </div>
         </div>
