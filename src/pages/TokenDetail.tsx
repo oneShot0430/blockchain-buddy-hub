@@ -398,7 +398,10 @@ const TokenDetail = () => {
           </div>
           <div className="bg-[#1E2538] rounded-lg p-3 mb-2">
             <div className="flex justify-between items-center">
-              <span className="text-xs text-gray-400">0x12...3456</span>
+              {pubAddress ? 
+                <span className="text-xs text-gray-400">{pubAddress.slice(0, 6)}...{pubAddress.slice(-4)}</span> : 
+                <span className="text-xs text-gray-400"></span>
+              }
               <div className="bg-indigo-600 rounded-md p-1">
                 <CreditCard className="h-4 w-4" />
               </div>
@@ -440,12 +443,6 @@ const TokenDetail = () => {
                 )}
               </Button>
               <WalletConnect />
-              <Button 
-                onClick={() => setShowBuyDialog(true)}
-                className="bg-[#7E69AB] hover:bg-[#6E59A5] text-white"
-              >
-                Buy {tokenData.symbol}
-              </Button>
             </div>
           </div>
         </div>
@@ -453,22 +450,31 @@ const TokenDetail = () => {
         <div className="p-8">
           <div className="max-w-full mx-auto">
             <div className="bg-[#1E2538] rounded-lg shadow-lg p-6 mb-6">
-              <div className="flex items-center gap-4 mb-6">
-                {logoUri && (
-                  <img
-                    src={logoUri}
-                    alt={tokenData.name}
-                    className="w-16 h-16 rounded-full"
-                  />
-                )}
-                <div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-xl">${tokenData.price.toFixed(8)}</span>
-                    <span className={`text-sm ${tokenData.change_24h >= 0 ? 'text-green-500' : 'text-red-500'}`}>
-                      {tokenData.change_24h >= 0 ? '+' : ''}{tokenData.change_24h.toFixed(2)}%
-                    </span>
+              <div className="flex items-start justify-between">
+                <div className="flex items-center gap-4 mb-6">
+                  {logoUri && (
+                    <img
+                      src={logoUri}
+                      alt={tokenData.name}
+                      className="w-16 h-16 rounded-full"
+                    />
+                  )}
+                  <div>
+                    <h3 className="text-2xl font-bold text-[#9b87f5]">{tokenData.name} ({tokenData.symbol})</h3>
+                    <div className="flex items-center gap-2">
+                      <span className="text-xl">${tokenData.price.toFixed(8)}</span>
+                      <span className={`text-sm ${tokenData.change_24h >= 0 ? 'text-green-500' : 'text-red-500'}`}>
+                        {tokenData.change_24h >= 0 ? '+' : ''}{tokenData.change_24h.toFixed(2)}%
+                      </span>
+                    </div>
                   </div>
                 </div>
+                <Button 
+                  onClick={() => setShowBuyDialog(true)}
+                  className="bg-[#7E69AB] hover:bg-[#6E59A5] text-white"
+                >
+                  Buy {tokenData.symbol}
+                </Button>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
