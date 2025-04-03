@@ -69,7 +69,7 @@ const Transactions = () => {
           <Button 
             variant="ghost" 
             onClick={() => navigate(-1)}
-            className="px-0 text-gray-400 hover:text-white"
+            className="px-4 text-gray-400 hover:text-white hover:bg-gray-900"
           >
             <ArrowLeft className="mr-2 h-5 w-5" />
             Back to Dashboard
@@ -94,7 +94,7 @@ const Transactions = () => {
                 
                 <div className="relative">
                   <select 
-                    className="rounded px-3 py-1 bg-transparent border border-gray-700 text-gray-300 appearance-none pr-8 focus:outline-none focus:ring-1 focus:ring-[#9b87f5]"
+                    className="rounded px-3 py-1 bg-gray-900 border border-gray-700 text-gray-300 appearance-none pr-8 focus:outline-none focus:ring-1 focus:ring-[#9b87f5]"
                     value={chainFilter}
                     onChange={(e) => setChainFilter(e.target.value)}
                   >
@@ -111,7 +111,7 @@ const Transactions = () => {
                 
                 <div className="relative">
                   <select 
-                    className="rounded px-3 py-1 bg-transparent border border-gray-700 text-gray-300 appearance-none pr-8 focus:outline-none focus:ring-1 focus:ring-[#9b87f5]"
+                    className="rounded px-3 py-1 bg-gray-900 border border-gray-700 text-gray-300 appearance-none pr-8 focus:outline-none focus:ring-1 focus:ring-[#9b87f5]"
                     value={timeFilter}
                     onChange={(e) => setTimeFilter(e.target.value)}
                   >
