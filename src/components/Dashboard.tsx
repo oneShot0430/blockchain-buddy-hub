@@ -160,12 +160,22 @@ export const Dashboard = () => {
   };
 
   if (isLoading) {
-    return <div className="text-center p-4 text-white bg-[#1A1F2C]">Loading coins...</div>;
+    return (
+      <div className="flex h-screen bg-[#1A1F2C] text-white">
+        <SideBarPanel />
+        <div className="text-center p-4 text-white bg-[#1A1F2C]">Loading coins...</div>
+      </div>
+    )
   }
 
   if (error) {
-    return <div className="text-center text-red-500 p-4 bg-[#1A1F2C]">Error loading coins</div>;
-  }
+    return (
+      <div className="flex h-screen bg-[#1A1F2C] text-white">
+        <SideBarPanel />
+        <div className="text-center p-4 text-white bg-[#1A1F2C]">Error loading coins</div>
+      </div>
+    )
+   }
 
   return (
     <div className="flex h-screen bg-[#1A1F2C] text-white">
