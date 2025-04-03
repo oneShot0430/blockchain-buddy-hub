@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { LayoutDashboard, FileText, Settings, CreditCard } from "lucide-react";
 import { useNavigate } from "react-router-dom";
@@ -37,7 +38,10 @@ export const SideBarPanel = () => {
           <LayoutDashboard className="h-5 w-5" />
           <span className="font-medium">Dashboard</span>
         </div>
-        <div className="text-gray-400 p-2 rounded-lg flex items-center space-x-3 hover:bg-[#1E2538] transition-colors">
+        <div 
+          className="text-gray-400 p-2 rounded-lg flex items-center space-x-3 hover:bg-[#1E2538] transition-colors cursor-pointer"
+          onClick={() => navigate('/transactions')}
+        >
           <FileText className="h-5 w-5" />
           <span>Transactions</span>
         </div>

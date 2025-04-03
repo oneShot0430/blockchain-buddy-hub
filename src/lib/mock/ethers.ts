@@ -1,21 +1,57 @@
 
+// Mock implementation for ethers
 export class BrowserProvider {
   constructor(ethereum: any) {
-    // Mock constructor
+    this.ethereum = ethereum;
   }
+  
+  ethereum: any;
 
-  async send(method: string, params: any[]): Promise<string[]> {
-    return ["0x742d35Cc6634C0532925a3b844Bc454e4438f44e"];
-  }
-
-  async getBalance(address: string): Promise<{ toString: () => string }> {
+  async getSigner() {
     return {
-      toString: () => "1000000000000000000" // 1 ETH in wei
+      address: "0x1234567890abcdef1234567890abcdef12345678",
+      connect: () => this,
+      getAddress: () => Promise.resolve("0x1234567890abcdef1234567890abcdef12345678"),
+      signMessage: (message: string) => Promise.resolve("0xmocksignature"),
+      sendTransaction: (tx: any) => {
+        console.log("Mock sendTransaction called", tx);
+        return Promise.resolve({
+          hash: "0xmocktxhash",
+          wait: () => Promise.resolve({ status: 1 })
+        });
+      }
     };
   }
 }
 
-export const formatEther = (wei: { toString: () => string }) => {
-  // Convert mock wei to ETH (1 ETH = 10^18 wei)
-  return "1.0";
+export class JsonRpcProvider {
+  constructor(url: string) {
+    this.url = url;
+  }
+  
+  url: string;
+  
+  getBalance(address: string) {
+    return Promise.resolve(BigInt(1000000000000000000)); // 1 ETH
+  }
+}
+
+export class Contract {
+  constructor(address: string, abi: any, provider: any) {
+    this.address = address;
+    this.abi = abi;
+    this.provider = provider;
+  }
+  
+  address: string;
+  abi: any;
+  provider: any;
+  
+  balanceOf(address: string) {
+    return Promise.resolve(BigInt(1000000)); // 1 USDC (with 6 decimals)
+  }
+}
+
+export const formatUnits = (value: bigint, decimals: number) => {
+  return (Number(value) / Math.pow(10, decimals)).toString();
 };
