@@ -4,7 +4,7 @@ import { ArrowLeft } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 import { Input } from "@/components/ui/input";
 import { useNavigate } from "react-router-dom";
-
+import { SideBarPanel } from "@/components/Sidebar";
 const Settings = () => {
   const navigate = useNavigate();
   const [autoInvest, setAutoInvest] = useState(false);
@@ -13,8 +13,9 @@ const Settings = () => {
   const [stopLoss, setStopLoss] = useState("10");
 
   return (
-    <div className="min-h-screen bg-[#12151F] text-white">
-      <div className="flex flex-col">
+    <div className="flex h-screen bg-[#1A1F2C] text-white">      
+      <SideBarPanel />
+      <div className="flex flex-col overflow-auto w-full">
         {/* Header */}
         <div className="p-4 flex items-center space-x-3 border-b border-gray-800">
           <button 

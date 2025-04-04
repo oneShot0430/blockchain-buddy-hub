@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -13,9 +12,10 @@ import { useMemo } from "react";
 import {
   WalletProvider,
   ConnectionProvider,
-} from "@/lib/mock/solana-wallet-adapter";
-import { WalletModalProvider } from "@/lib/mock/solana-wallet-adapter";
-import { clusterApiUrl, PhantomWalletAdapter } from "@/lib/mock/solana-wallet-adapter";
+} from "@solana/wallet-adapter-react";
+import { WalletModalProvider } from "@solana/wallet-adapter-react-ui";
+import { clusterApiUrl } from "@solana/web3.js";
+import { PhantomWalletAdapter } from "@solana/wallet-adapter-wallets";
 
 const queryClient = new QueryClient();
 
