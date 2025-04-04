@@ -8,6 +8,7 @@ import Index from "./pages/Index";
 import Roadmap from "./pages/Roadmap";
 import TokenDetail from "./pages/TokenDetail";
 import Transactions from "./pages/Transactions";
+import Settings from "./pages/Settings";
 import { useMemo } from "react";
 import {
   WalletProvider,
@@ -36,6 +37,7 @@ const App = () => {
                   <Route path="/roadmap" element={<Roadmap />} />
                   <Route path="/token/:symbol" element={<TokenDetail />} />
                   <Route path="/transactions" element={<Transactions />} />
+                  <Route path="/settings" element={<Settings />} />
                 </Routes>
               </HashRouter>
             </TooltipProvider>

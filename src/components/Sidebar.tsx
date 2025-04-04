@@ -1,10 +1,13 @@
 
 import { useState, useEffect } from "react";
 import { LayoutDashboard, FileText, Settings, CreditCard } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { BrowserProvider } from "ethers";
 
 export const SideBarPanel = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [pubAddress, setPubAddress] = useState("");
 
   useEffect(() => {
     const getWalletAddress = async () => {
@@ -17,8 +20,9 @@ export const SideBarPanel = () => {
     getWalletAddress();
   }, [window.ethereum]);
   
-  const navigate = useNavigate();
-  const [pubAddress, setPubAddress] = useState("");
+  const isActive = (path: string) => {
+    return location.pathname === path;
+  };
 
   return (
     <div className="w-60 bg-[#12151F] flex flex-col">
@@ -34,18 +38,24 @@ export const SideBarPanel = () => {
       </div>
       
       <div className="flex-1 px-2 py-4">
-        <div className="text-gray-400 p-2 rounded-lg flex items-center space-x-3 hover:bg-[#1E2538] transition-colors cursor-pointer" onClick={() => navigate('/')}>
+        <div 
+          className={`p-2 rounded-lg flex items-center space-x-3 hover:bg-[#1E2538] transition-colors cursor-pointer ${isActive('/') ? 'bg-[#1E2538] text-white' : 'text-gray-400'}`} 
+          onClick={() => navigate('/')}
+        >
           <LayoutDashboard className="h-5 w-5" />
           <span className="font-medium">Dashboard</span>
         </div>
         <div 
-          className="text-gray-400 p-2 rounded-lg flex items-center space-x-3 hover:bg-[#1E2538] transition-colors cursor-pointer"
+          className={`p-2 rounded-lg flex items-center space-x-3 hover:bg-[#1E2538] transition-colors cursor-pointer ${isActive('/transactions') ? 'bg-[#1E2538] text-white' : 'text-gray-400'}`}
           onClick={() => navigate('/transactions')}
         >
           <FileText className="h-5 w-5" />
           <span>Transactions</span>
         </div>
-        <div className="text-gray-400 p-2 rounded-lg flex items-center space-x-3 hover:bg-[#1E2538] transition-colors">
+        <div 
+          className={`p-2 rounded-lg flex items-center space-x-3 hover:bg-[#1E2538] transition-colors cursor-pointer ${isActive('/settings') ? 'bg-[#1E2538] text-white' : 'text-gray-400'}`}
+          onClick={() => navigate('/settings')}
+        >
           <Settings className="h-5 w-5" />
           <span>Settings</span>
         </div>
