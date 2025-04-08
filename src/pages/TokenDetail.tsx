@@ -139,10 +139,10 @@ const TokenDetail = () => {
     try {
       const toChain = tokenData.platform.name === "Ethereum" ? "ETH" : tokenData.platform.name.toUpperCase();
       const allRoutes = await getRoute("BASE", toChain, "USDC", tokenData.symbol, USDC, tokenData.contract, amount);
-      const filteredRoutes = (allRoutes?.results || []).filter(
-        result => result.swaps?.length === 1
+      const sortedRoutes = (allRoutes?.results || []).sort(
+        (a, b) => (a.swaps?.length || 0) - (b.swaps?.length || 0)
       );
-      setRoutes(filteredRoutes);
+      setRoutes(sortedRoutes);
       // setShowBuyDialog(false);
 
       setShowRoutesDialog(true);
