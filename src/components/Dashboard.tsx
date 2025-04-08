@@ -283,6 +283,7 @@ export const Dashboard = () => {
               </thead>
               <tbody className="divide-y divide-gray-800">
                 {coinData.map((data, index) => (
+                  (data.market_cap > 200000000) && 
                   <tr 
                     key={index} 
                     onClick={() => handleTokenClick(data.symbol)}
