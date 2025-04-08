@@ -53,5 +53,5 @@ export const explorerMap = {
   // Add others as needed
 };
 
-export const DEXSCREENER_URL = "https://dexscreener.com/search/";
+export const DEXSCREENER_URL = "https://dexscreener.com/";
 

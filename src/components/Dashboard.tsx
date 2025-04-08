@@ -77,9 +77,9 @@ export const Dashboard = () => {
     navigate(`/token/${symbol}`);
   };
 
-  const handleDexScreenerClick = (symbol: string, e: React.MouseEvent) => {
+  const handleDexScreenerClick = (data: CMCResult, e: React.MouseEvent) => {
     e.stopPropagation();
-    window.open(`${DEXSCREENER_URL}${symbol}`, '_blank');
+    window.open(`${DEXSCREENER_URL}${data.platform.name.toLowerCase()}/${data.contract}`, '_blank');
   };
 
   useEffect(() => {
@@ -294,7 +294,7 @@ export const Dashboard = () => {
                           variant="outline" 
                           size="sm"
                           className="bg-transparent hover:bg-[#2b2f41] border border-[#444] text-white text-xs py-1 px-3 mr-4 flex items-center gap-1"
-                          onClick={(e) => handleDexScreenerClick(data.symbol, e)}
+                          onClick={(e) => handleDexScreenerClick(data, e)}
                         >
                           <ExternalLink className="h-3 w-3" />
                           <span>Dexscreener</span>
