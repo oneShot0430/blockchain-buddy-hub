@@ -1,3 +1,4 @@
+
 import { useWallet } from "@/lib/mock/solana-wallet-adapter";
 import { 
   Search, 
@@ -16,7 +17,8 @@ import {
   ArrowUp, 
   ArrowDown,
   Sun,
-  Moon
+  Moon,
+  ExternalLink
 } from "lucide-react";
 import { BrowserProvider } from "ethers";
 import { Button } from "./ui/button";
@@ -27,7 +29,7 @@ import { fetchRaydiumTokens, fetchMemeOnBaseTokenList } from "@/hooks/fetchToken
 import { useEffect, useState } from "react";
 import { getTokenData } from "@/hooks/getTokenData";
 import { CMCResult } from "@/type/interface";
-import { defaultData } from "@/const/const";
+import { defaultData, DEXSCREENER_URL } from "@/const/const";
 import { useNavigate } from "react-router-dom";
 import { WalletConnect } from "@/components/WalletConnect";
 import {
@@ -75,16 +77,21 @@ export const Dashboard = () => {
     navigate(`/token/${symbol}`);
   };
 
-    useEffect(() => {
-      const getBalance = async () => {
-        if (!window.ethereum) return;
-        const provider = new BrowserProvider(window.ethereum);
-        const signer = await provider.getSigner();
-        setPubAddress(signer.address);
-      }
-  
-      getBalance();
-    }, [window.ethereum]);
+  const handleDexScreenerClick = (symbol: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    window.open(`${DEXSCREENER_URL}${symbol}`, '_blank');
+  };
+
+  useEffect(() => {
+    const getBalance = async () => {
+      if (!window.ethereum) return;
+      const provider = new BrowserProvider(window.ethereum);
+      const signer = await provider.getSigner();
+      setPubAddress(signer.address);
+    }
+
+    getBalance();
+  }, [window.ethereum]);
 
   useEffect(() => {
     const fetchCMCData = async () => {
@@ -283,18 +290,16 @@ export const Dashboard = () => {
                   >
                     <td className="px-6 py-4">
                       <div className="flex items-center">
-                        <div className="flex-shrink-0 h-8 w-8">
-                          {data.logo_uri ? (
-                            <img
-                              src={data.logo_uri}
-                              alt={data.name}
-                              className="h-8 w-8 rounded-full object-cover"
-                            />
-                          ) : (
-                            <div className="h-8 w-8 rounded-full bg-gray-700" />
-                          )}
-                        </div>
-                        <div className="ml-4">
+                        <Button 
+                          variant="outline" 
+                          size="sm"
+                          className="bg-transparent hover:bg-[#2b2f41] border border-[#444] text-white text-xs py-1 px-3 mr-4 flex items-center gap-1"
+                          onClick={(e) => handleDexScreenerClick(data.symbol, e)}
+                        >
+                          <ExternalLink className="h-3 w-3" />
+                          <span>Dexscreener</span>
+                        </Button>
+                        <div className="ml-0">
                           <div className="font-medium">{data.name}</div>
                           <div className="text-sm text-gray-400">{data.symbol}</div>
                         </div>

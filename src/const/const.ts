@@ -1,3 +1,4 @@
+
 import { CMCResult } from "@/type/interface";
 
 export const USDC = "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913";
@@ -51,3 +52,6 @@ export const explorerMap = {
   Base: "https://basescan.org/token/",
   // Add others as needed
 };
+
+export const DEXSCREENER_URL = "https://dexscreener.com/search/";
+
