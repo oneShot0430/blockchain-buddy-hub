@@ -290,18 +290,18 @@ export const Dashboard = () => {
                   >
                     <td className="px-6 py-4">
                       <div className="flex items-center">
-                        <Button 
-                          variant="dexscreener" 
-                          size="xs"
-                          className="flex items-center gap-1 rounded py-1 px-2"
-                          onClick={(e) => handleDexScreenerClick(data, e)}
-                        >
-                          <ExternalLink className="h-3 w-3" />
-                          <span>View on DEXScreener</span>
-                        </Button>
                         <div className="ml-2">
                           <div className="font-medium">{data.name}</div>
                           <div className="text-sm text-gray-400">{data.symbol}</div>
+                          <Button 
+                            variant="dexscreener" 
+                            size="xs"
+                            className="flex items-center gap-1 rounded py-1 px-2"
+                            onClick={(e) => handleDexScreenerClick(data, e)}
+                          >
+                            <ExternalLink className="h-3 w-3" />
+                            <span>View on DEXScreener</span>
+                          </Button>
                         </div>
                       </div>
                     </td>
