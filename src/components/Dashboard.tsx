@@ -292,15 +292,15 @@ export const Dashboard = () => {
                     <td className="px-6 py-4">
                       <div className="flex items-center">
                         <Button 
-                          variant="outline" 
-                          size="sm"
-                          className="bg-transparent hover:bg-[#2b2f41] border border-[#444] text-white text-xs py-1 px-3 mr-4 flex items-center gap-1"
+                          variant="dexscreener" 
+                          size="xs"
+                          className="flex items-center gap-1 rounded py-1 px-2"
                           onClick={(e) => handleDexScreenerClick(data, e)}
                         >
                           <ExternalLink className="h-3 w-3" />
-                          <span>Dexscreener</span>
+                          <span>View on DEXScreener</span>
                         </Button>
-                        <div className="ml-0">
+                        <div className="ml-2">
                           <div className="font-medium">{data.name}</div>
                           <div className="text-sm text-gray-400">{data.symbol}</div>
                         </div>
