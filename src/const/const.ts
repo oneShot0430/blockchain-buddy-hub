@@ -42,3 +42,12 @@ export const PAYMASTER_PROXY_URL = `${BACKEND_HEROKU_URL}api/paymaster`; // Call
 export const ENTRYPOINT_ADDRESS = "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789"; // ERC-4337 Entrypoint
 export const BASE_CHAIN_ID = "0x2105"; // Base Chain ID
 export const USDC_CONTRACT = "0x833589fCD6eDb6E08f4c7C32D4f71b54bda02913"; // USDC Address on Base
+
+export const explorerMap = {
+  Ethereum: "https://etherscan.io/token/",
+  Solana: "https://solscan.io/token/",
+  Polygon: "https://polygonscan.com/token/",
+  Binance: "https://bscscan.com/token/",
+  Base: "https://basescan.org/token/",
+  // Add others as needed
+};

@@ -40,6 +40,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { BASE_CHAIN_ID, USDC_CONTRACT, ENTRYPOINT_ADDRESS, PAYMASTER_PROXY_URL } from "@/const/const";
 import { WalletConnect } from "@/components/WalletConnect";
 import { SideBarPanel } from "@/components/Sidebar";
+import { explorerMap } from "@/const/const";
 
 const TokenDetail = () => {
   const { toast } = useToast();
@@ -374,7 +375,7 @@ const TokenDetail = () => {
                   <div className="text-sm text-gray-400">CMC Rank</div>
                   <div className="text-lg font-semibold">#{tokenData.social_score}</div>
                 </div>
-                <a href={`https://basescan.org/token/${tokenData.contract}`} target="_blank" rel="noopener noreferrer">
+                <a href={`${explorerMap[tokenData.platform.name] || 'https://etherscan.io/token/'}${tokenData.contract}`} target="_blank" rel="noopener noreferrer">
                   <div className="bg-[#1A1F2C] p-4 rounded-lg cursor-pointer hover:bg-[#22263A]">
                     <div className="text-sm text-gray-400">Contract</div>
                     <div className="text-sm font-mono truncate text-[#9b87f5]">{tokenData.contract.slice(0, 4)}...{tokenData.contract.slice(-3)}</div>
