@@ -19,7 +19,8 @@ const buttonVariants = cva(
           "bg-secondary text-secondary-foreground hover:bg-secondary/80",
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
-        dexscreener: "bg-[#7E69AB] hover:bg-[#6E59A5] text-white border-none",
+        dexscreener: "bg-gradient-to-r from-[#7E69AB] to-[#6E59A5] hover:from-[#6E59A5] hover:to-[#5A4991] text-white border-none shadow-md",
+        autoinvest: "bg-gradient-to-r from-[#8B5CF6] to-[#6E59A5] hover:from-[#7E69AB] hover:to-[#6E59A5] text-white border-none shadow-md",
       },
       size: {
         default: "h-10 px-4 py-2",

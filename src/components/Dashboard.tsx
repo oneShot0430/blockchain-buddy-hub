@@ -1,4 +1,3 @@
-
 import { useWallet } from "@/lib/mock/solana-wallet-adapter";
 import { 
   Search, 
@@ -348,8 +347,9 @@ export const Dashboard = () => {
                     </td>
                     <td className="px-6 py-4">
                       <Button 
-                        variant="outline" 
-                        className="bg-[#7E69AB] hover:bg-[#6E59A5] border-none text-white text-xs py-1 px-3"
+                        variant="autoinvest" 
+                        size="xs"
+                        className="text-xs py-1 px-3"
                         onClick={(e) => {
                           e.stopPropagation();
                         }}
