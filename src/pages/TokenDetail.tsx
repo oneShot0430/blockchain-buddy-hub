@@ -159,6 +159,7 @@ const TokenDetail = () => {
 
   const handleBuy = async () => {
     try {
+      console.log("selected Routes:", selectedRoute);
       if(!receiptionAddress) {
         toast({
           title: "No Receiption Address",
@@ -166,7 +167,18 @@ const TokenDetail = () => {
         });
         return;
       }
+      
+      
       const toChain = tokenData.platform.name === "Ethereum" ? "ETH" : tokenData.platform.name.toUpperCase();
+      const selectedWallets = selectedRoute.swaps
+        .flatMap(swap => [swap.from.blockchain, swap.to.blockchain])
+        .filter((blockchain, index, self) => self.indexOf(blockchain) === index)
+        .map(blockchain => ({ [blockchain]: (blockchain === "SOLANA" ? receiptionAddress : pubAddress) }))
+        .reduce((acc, obj) => {
+          return { ...acc, ...obj };
+        }, {});
+
+      console.log("selectedWallets:", selectedWallets);
       const confirmResponse = await confirmRoute(selectedRoute.requestId, "BASE", toChain, pubAddress, receiptionAddress);
       const confirmedRoute = confirmResponse.result;
       if (!confirmedRoute) {

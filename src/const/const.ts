@@ -50,6 +50,7 @@ export const explorerMap = {
   Polygon: "https://polygonscan.com/token/",
   Binance: "https://bscscan.com/token/",
   Base: "https://basescan.org/token/",
+  Arbitrum: "https://www.arbiscan.io/token"
   // Add others as needed
 };
 
